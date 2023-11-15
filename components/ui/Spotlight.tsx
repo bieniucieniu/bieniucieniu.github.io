@@ -1,23 +1,35 @@
 "use client";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { MouseEvent } from "react";
+import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function Spotlight({ className }: { className?: string }) {
-  let mouseX = useMotionValue(0);
-  let mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const left = useMotionValue(0);
+  const top = useMotionValue(0);
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
-    let { left, top } = currentTarget.getBoundingClientRect();
-
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
+  function refCallback(e: HTMLDivElement | null) {
+    if (!e) return;
+    const { left: l, top: t } = e.getBoundingClientRect();
+    left.set(l);
+    top.set(t);
   }
+
+  function handleMouseMove({ clientX, clientY }: MouseEvent) {
+    mouseX.set(clientX - left.get());
+    mouseY.set(clientY - top.get());
+  }
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
     <div
+      ref={refCallback}
       className={twMerge("group overflow-hidden", className)}
-      onMouseMove={handleMouseMove}
     >
       <motion.div
         className="pointer-events-none absolute -inset-px transition"
