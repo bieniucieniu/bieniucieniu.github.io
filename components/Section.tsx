@@ -24,7 +24,10 @@ export default function Section({
 
   const Comp = asChild ? Slot : "section";
 
-  useEffect(() => setFocus(value), [isInView]);
+  useEffect(() => {
+    if (isInView == true) setFocus(value);
+    console.log(isInView, value);
+  }, [isInView]);
 
   return (
     <Comp {...props} ref={ref}>
