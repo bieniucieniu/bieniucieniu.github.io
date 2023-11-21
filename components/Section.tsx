@@ -26,7 +26,6 @@ export default function Section({
 
   useEffect(() => {
     if (isInView == true) setFocus(value);
-    console.log(isInView, value);
   }, [isInView]);
 
   return (
