@@ -1,54 +1,64 @@
 import Section from "@/components/Section";
 import Nav from "@/components/Nav";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, MoveUpRight } from "lucide-react";
 import Link from "next/link";
 
-const projects: { title: string; content: React.ReactNode; tags: string[] }[] =
-  [
-    {
-      title: "Bracia Bien",
-      content: `
+const projects: {
+  title: string;
+  content: React.ReactNode;
+  tags: string[];
+  link?: string;
+}[] = [
+  {
+    title: "Bracia Bien",
+    content: `
           This is a web page for my father’s shop. It features fully dynamic
           images stored on a bucket and managed through a Postgres database on
           the admin page.
-
 `,
-      tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
-    },
-    {
-      title: "Breakout",
-      content: `This is a replica of the classic breakout game. It also has a
+    tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
+    link: "https://braciabien.pl/",
+  },
+  {
+    title: "Breakout",
+    content: `This is a replica of the classic breakout game. It also has a
                 ‘gravity’ version, but it performs poorly.`,
-      tags: ["TypeScript", "three.js", "vanilla-extract-css"],
-    },
+    tags: ["TypeScript", "three.js", "vanilla-extract-css"],
 
-    {
-      title: "Portfolio",
-      content: `This is my personal website, which features a ‘window manager’.
+    link: "https://breakout.bieniucieniu.pl/",
+  },
+
+  {
+    title: "previous Portfolio",
+    content: `This used to be my personal website, which features a ‘window manager’.
                 An interesting aspect of this website
                 is that the content in the window can be rendered on the Next.js
                 server.`,
-      tags: ["Next.js", "Framer Motion"],
-    },
-    {
-      title: "Midar",
-      content: "IT company website, currently in production.",
-      tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
-    },
-    {
-      title: "sorting",
-      content: `This is my first real project with vanilla JS/TS, which utilizes
+    tags: ["Next.js", "Framer Motion"],
+    link: "https://previous.bieniucieniu.pl",
+  },
+  {
+    title: "Midar",
+    content: "IT company website, currently in production.",
+    tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
+    link: "https://midar.bieniucieniu.pl/",
+  },
+  {
+    title: "sorting",
+    content: `This is my first real project with vanilla JS/TS, which utilizes
                 HTML canvas to visualize four sorting algorithms.`,
-      tags: ["vanilla js", "TypeScript"],
-    },
-    {
-      title: "weather app",
-      content: `This is my only project that uses Angular. It utilizes the Open
+    tags: ["vanilla js", "TypeScript"],
+    link: "https://sorting.bieniucieniu.pl/",
+  },
+  {
+    title: "weather app",
+    content: `This is my only project that uses Angular. It utilizes the Open
                 Weather API to display the temperature, weather condition and
                 wind speed.`,
-      tags: ["Angular"],
-    },
-  ];
+    tags: ["Angular"],
+    link: "https://weather-app.bieniucieniu.pl/",
+  },
+];
 
 export default function Home() {
   return (
@@ -90,6 +100,7 @@ export default function Home() {
       <main className="w-1/2 flex flex-col gap-y-20 lg:py-24 ">
         <Section
           value="about"
+          amount="all"
           id="about"
           className="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
         >
@@ -114,22 +125,28 @@ export default function Home() {
 
         <Section value="projects" id="projects">
           <ul className="flex flex-col pl-10 group">
-            {projects.map(({ title, content, tags }) => (
-              <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
-                <h2 className="font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
-                  <a className="underline-offset-4 hover:underline">{title}</a>
-                </h2>
-                <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
-                  {content}
-                </p>
-                <ul className="flex gap-x-2 pt-3">
-                  {tags.map((tag) => (
-                    <li className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              </li>
+            {projects.map(({ title, content, tags, link }) => (
+              <Link
+                href={link ?? "#"}
+                {...(link ? { target: "_blank" } : null)}
+              >
+                <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
+                  <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
+                    {title}
+                    <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
+                  </h2>
+                  <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
+                    {content}
+                  </p>
+                  <ul className="flex gap-x-2 pt-3">
+                    {tags.map((tag) => (
+                      <li className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1">
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              </Link>
             ))}
           </ul>
         </Section>
