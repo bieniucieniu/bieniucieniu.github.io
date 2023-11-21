@@ -127,6 +127,7 @@ export default function Home() {
           <ul className="flex flex-col pl-10 group">
             {projects.map(({ title, content, tags, link }) => (
               <Link
+                key={title}
                 href={link ?? "#"}
                 {...(link ? { target: "_blank" } : null)}
               >
@@ -139,8 +140,11 @@ export default function Home() {
                     {content}
                   </p>
                   <ul className="flex gap-x-2 pt-3">
-                    {tags.map((tag) => (
-                      <li className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1">
+                    {tags.map((tag, i) => (
+                      <li
+                        key={title + tag + i}
+                        className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
+                      >
                         {tag}
                       </li>
                     ))}
