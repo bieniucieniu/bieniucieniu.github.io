@@ -1,13 +1,25 @@
 import Section from "@/components/Section";
 import Nav from "@/components/Nav";
 import { Github, Linkedin, Mail, MoveUpRight } from "lucide-react";
-import Link from "next/link";
+import NextLink, { LinkProps } from "next/link";
+
+function Link({
+  href,
+  ...props
+}: Pick<
+  React.HTMLProps<HTMLAnchorElement>,
+  "href" | "target" | "className" | "children"
+>) {
+  if (href !== undefined) return <NextLink href={href} {...props} />;
+  return <div {...props} />;
+}
 
 const projects: {
   title: string;
   content: React.ReactNode;
   tags: string[];
   link?: string;
+  repo?: string;
 }[] = [
   {
     title: "Bracia Bien",
@@ -18,14 +30,15 @@ const projects: {
 `,
     tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
     link: "https://braciabien.pl/",
+    repo: "https://github.com/bieniucieniu/bracia-bien",
   },
   {
     title: "Breakout",
     content: `This is a replica of the classic breakout game. It also has a
                 ‘gravity’ version, but it performs poorly.`,
     tags: ["TypeScript", "three.js", "vanilla-extract-css"],
-
     link: "https://breakout.bieniucieniu.pl/",
+    repo: "https://github.com/bieniucieniu/breakout",
   },
 
   {
@@ -36,12 +49,14 @@ const projects: {
                 server.`,
     tags: ["Next.js", "Framer Motion"],
     link: "https://previous.bieniucieniu.pl",
+    repo: "https://github.com/bieniucieniu/portfolio-website",
   },
   {
     title: "Midar",
     content: "IT company website, currently in production.",
     tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
     link: "https://midar.bieniucieniu.pl/",
+    repo: "https://github.com/bieniucieniu/midar-astro",
   },
   {
     title: "sorting",
@@ -49,6 +64,7 @@ const projects: {
                 HTML canvas to visualize four sorting algorithms.`,
     tags: ["vanilla js", "TypeScript"],
     link: "https://sorting.bieniucieniu.pl/",
+    repo: "https://github.com/bieniucieniu/sorting",
   },
   {
     title: "weather app",
@@ -57,11 +73,13 @@ const projects: {
                   wind speed.`,
     tags: ["Angular"],
     link: "https://weather-app.bieniucieniu.pl/",
+    repo: "https://github.com/bieniucieniu/weather-app-angular",
   },
   {
     title: "no esta bien",
     content: `puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.`,
     tags: ["Go", "Go Fiber", "html", "css"],
+    repo: "https://github.com/bieniucieniu/noestabien",
   },
 ];
 
@@ -130,33 +148,45 @@ export default function Home() {
 
         <Section value="projects" id="projects">
           <ul className="flex flex-col pl-10 group">
-            {projects.map(({ title, content, tags, link }) => (
-              <Link
-                key={title}
-                href={link ?? "#"}
-                {...(link ? { target: "_blank" } : null)}
-              >
-                <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
-                  <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
-                    {title}
-                    <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
-                  </h2>
-                  <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
-                    {content}
-                  </p>
-                  <ul className="flex gap-x-2 pt-3">
-                    {tags.map((tag, i) => (
-                      <li
-                        key={title + tag + i}
-                        className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              </Link>
-            ))}
+            {projects.map(({ title, content, tags, link, repo }) => {
+              return (
+                <Link
+                  key={title}
+                  {...(link ? { target: "_blank", href: link } : null)}
+                >
+                  <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
+                    <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
+                      {title}
+                      <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
+                    </h2>
+                    <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
+                      {content}
+                    </p>
+                    <div className="flex justify-between pt-3">
+                      <ul className="flex gap-x-2 ">
+                        {tags.map((tag, i) => (
+                          <li
+                            key={title + tag + i}
+                            className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
+                          >
+                            {tag}
+                          </li>
+                        ))}
+                      </ul>
+                      {repo !== undefined ? (
+                        <Link
+                          href={repo}
+                          target="_blank"
+                          className="opacity-70 rounded-full group-hover:opacity-90 hover:backdrop-blur-md hover:bg-slate-500/10"
+                        >
+                          <Github className="h-5 w-5 m-1" />
+                        </Link>
+                      ) : null}
+                    </div>
+                  </li>
+                </Link>
+              );
+            })}
           </ul>
         </Section>
       </main>
