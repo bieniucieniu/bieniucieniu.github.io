@@ -53,10 +53,15 @@ const projects: {
   {
     title: "weather app",
     content: `This is my only project that uses Angular. It utilizes the Open
-                Weather API to display the temperature, weather condition and
-                wind speed.`,
+                  Weather API to display the temperature, weather condition and
+                  wind speed.`,
     tags: ["Angular"],
     link: "https://weather-app.bieniucieniu.pl/",
+  },
+  {
+    title: "no esta bien",
+    content: `puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.`,
+    tags: ["Go", "Go Fiber", "html", "css"],
   },
 ];
 
