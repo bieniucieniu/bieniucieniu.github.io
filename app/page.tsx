@@ -1,8 +1,7 @@
 import Section from "@/components/Section";
 import Nav from "@/components/Nav";
 import { Github, Linkedin, Mail, MoveUpRight } from "lucide-react";
-import NextLink, { LinkProps } from "next/link";
-
+import NextLink from "next/link";
 function Link({
   href,
   ...props
@@ -79,16 +78,17 @@ const projects: {
     title: "no esta bien",
     content: `puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.`,
     tags: ["Go", "Go Fiber", "html", "css"],
+    link: "https://github.com/bieniucieniu/noestabien",
     repo: "https://github.com/bieniucieniu/noestabien",
   },
 ];
 
 export default function Home() {
   return (
-    <div className="max-w-screen-xl mx-auto relative flex lg:px-20">
+    <div className="max-w-screen-xl relative flex flex-col lg:flex-row lg:px-20 mx-4 sm:mx-20 lg:mx-auto">
       <header className="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
         <div>
-          <h1 className="font-black text-5xl leading-normal drop-shadow">
+          <h1 className="font-black text-3xl sm:text-5xl leading-normal drop-shadow">
             Mikołaj Bień
           </h1>
           <h3 className="text-xl font-normal text-slate-400 drop-shadow">
@@ -120,7 +120,7 @@ export default function Home() {
           <Nav />
         </div>
       </header>
-      <main className="w-1/2 flex flex-col gap-y-20 lg:py-24 ">
+      <main className="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
         <Section
           value="about"
           amount="all"
