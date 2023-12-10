@@ -85,110 +85,158 @@ const projects: {
 
 export default function Home() {
   return (
-    <div className="max-w-screen-xl relative flex flex-col lg:flex-row lg:px-20 mx-4 sm:mx-20 lg:mx-auto">
-      <header className="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
-        <div>
-          <h1 className="font-black text-3xl sm:text-5xl leading-normal drop-shadow">
-            Mikołaj Bień
-          </h1>
-          <h3 className="text-xl font-normal text-slate-400 drop-shadow">
-            juniot Front-end developer
-          </h3>
-          <div className="flex flex-row gap-x-4 py-2">
-            <Link
-              className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-              href="https://github.com/bieniucieniu"
-              target="_blank"
-            >
-              <Github />
-            </Link>
-            <Link
-              className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-              href="mailto:bienmikolaj@gmail.com"
-              target="_blank"
-            >
-              <Mail />
-            </Link>
-            <Link
-              className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-              href="https://www.linkedin.com/in/mikołaj-bień-6090b2237"
-              target="_blank"
-            >
-              <Linkedin />
-            </Link>
+    <>
+      <div className="max-w-screen-xl relative flex flex-col lg:flex-row lg:px-20 mx-4 sm:mx-20 lg:mx-auto">
+        <header className="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+          <div>
+            <h1 className="font-black text-3xl sm:text-5xl leading-normal drop-shadow">
+              Mikołaj Bień
+            </h1>
+            <h3 className="text-xl font-normal text-slate-400 drop-shadow">
+              juniot Front-end developer
+            </h3>
+            <div className="flex flex-row gap-x-4 py-2">
+              <Link
+                className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
+                href="https://github.com/bieniucieniu"
+                target="_blank"
+              >
+                <Github />
+              </Link>
+              <Link
+                className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
+                href="mailto:bienmikolaj@gmail.com"
+                target="_blank"
+              >
+                <Mail />
+              </Link>
+              <Link
+                className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
+                href="https://www.linkedin.com/in/mikołaj-bień-6090b2237"
+                target="_blank"
+              >
+                <Linkedin />
+              </Link>
+            </div>
+            <Nav />
           </div>
-          <Nav />
-        </div>
-      </header>
-      <main className="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
-        <Section
-          value="about"
-          id="about"
-          className="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-        >
-          <p>
-            I have three years of experience in web development, specializing in
-            front-end technologies. I acquired my skills through self-study and
-            freelance projects in Poland.
-          </p>
-          <p>
-            I mainly use <span className="font-bold text-slate-100">React</span>{" "}
-            and <span className="font-bold text-slate-100">TypeScript</span>{" "}
-            with <span className="font-bold text-slate-100">Next.js</span> as my
-            preferred tools for web development. I also employ various libraries
-            and add-ons, such as{" "}
-            <span className="font-bold text-slate-100">
-              React-Free-Fiber/drei, Radix-ui, framer-motion, tailwind,
-              vanilla-extract-css, zod, drizzle{" "}
-            </span>{" "}
-            and others.
-          </p>
-        </Section>
+        </header>
+        <main className="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
+          <Section
+            value="about"
+            id="about"
+            className="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
+          >
+            <h2 className="text-xl font-black text-teal-500/80 inline lg:hidden">
+              About
+            </h2>
+            <p>
+              I have three years of experience in web development, specializing
+              in front-end technologies. I acquired my skills through self-study
+              and freelance projects in Poland.
+            </p>
+            <p>
+              I mainly use{" "}
+              <span className="font-bold text-slate-100">React</span> and{" "}
+              <span className="font-bold text-slate-100">TypeScript</span> with{" "}
+              <span className="font-bold text-slate-100">Next.js</span> as my
+              preferred tools for web development. I also employ various
+              libraries and add-ons, such as{" "}
+              <span className="font-bold text-slate-100">
+                React-Free-Fiber/drei, Radix-ui, framer-motion, tailwind,
+                vanilla-extract-css, zod, drizzle{" "}
+              </span>{" "}
+              and others.
+            </p>
+          </Section>
 
-        <Section value="projects" id="projects">
-          <ul className="flex flex-col pl-10 group">
-            {projects.map(({ title, content, tags, link, repo }) => {
-              return (
-                <Link
-                  key={title}
-                  {...(link ? { target: "_blank", href: link } : null)}
-                >
-                  <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
-                    <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
-                      {title}
-                      <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
-                    </h2>
-                    <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
-                      {content}
-                    </p>
-                    <div className="flex justify-between pt-3">
-                      <ul className="flex gap-x-2 ">
-                        {tags.map((tag, i) => (
-                          <li
-                            key={title + tag + i}
-                            className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
+          <Section value="projects" id="projects">
+            <h2 className="text-xl font-black text-teal-500/80 inline lg:hidden">
+              Projects
+            </h2>
+            <ul className="flex flex-col pl-10 group">
+              {projects.map(({ title, content, tags, link, repo }) => {
+                return (
+                  <Link
+                    key={title}
+                    {...(link ? { target: "_blank", href: link } : null)}
+                  >
+                    <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
+                      <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
+                        {title}
+                        <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
+                      </h2>
+                      <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
+                        {content}
+                      </p>
+                      <div className="flex justify-between pt-3">
+                        <ul className="flex gap-x-2 ">
+                          {tags.map((tag, i) => (
+                            <li
+                              key={title + tag + i}
+                              className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
+                            >
+                              {tag}
+                            </li>
+                          ))}
+                        </ul>
+                        {repo !== undefined ? (
+                          <Link
+                            href={repo}
+                            target="_blank"
+                            className="opacity-70 rounded-full group-hover:opacity-90 hover:backdrop-blur-md hover:bg-slate-500/10"
                           >
-                            {tag}
-                          </li>
-                        ))}
-                      </ul>
-                      {repo !== undefined ? (
-                        <Link
-                          href={repo}
-                          target="_blank"
-                          className="opacity-70 rounded-full group-hover:opacity-90 hover:backdrop-blur-md hover:bg-slate-500/10"
-                        >
-                          <Github className="h-5 w-5 m-1" />
-                        </Link>
-                      ) : null}
-                    </div>
-                  </li>
-                </Link>
-              );
-            })}
-          </ul>
-        </Section>
-      </main>
-    </div>
+                            <Github className="h-5 w-5 m-1" />
+                          </Link>
+                        ) : null}
+                      </div>
+                    </li>
+                  </Link>
+                );
+              })}
+            </ul>
+          </Section>
+          <Section id="contacts" value="contacts">
+            <footer>
+              <h2 className="text-xl font-black text-teal-500/80 inline lg:hidden">
+                Contacts
+              </h2>
+              <ul className="pl-10 text-lg font-bold group">
+                <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:!opacity-100 group-hover:opacity-50 transition-all">
+                  <span className="">github: </span>
+                  <Link
+                    className="text-teal-500 hover:underline"
+                    href="https://github.com/bieniucieniu"
+                    target="_blank"
+                  >
+                    github.com/bieniucieniu
+                  </Link>
+                </li>
+                <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:!opacity-100 group-hover:opacity-50 transition-all">
+                  mail:{" "}
+                  <Link
+                    className="text-teal-500 hover:underline"
+                    href="mailto:bienmikolaj@gmail.com"
+                    target="_blank"
+                  >
+                    bienmikolaj@gmail.com
+                  </Link>
+                </li>
+                <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:!opacity-100 group-hover:opacity-50 transition-all">
+                  linkedin:{" "}
+                  <Link
+                    className="text-teal-500 hover:underline"
+                    href="https://www.linkedin.com/in/mikołaj-bień-6090b2237"
+                    target="_blank"
+                  >
+                    www.linkedin.com/in/mikołaj-bień-6090b2237
+                  </Link>
+                </li>
+              </ul>
+            </footer>
+          </Section>
+        </main>
+      </div>
+    </>
   );
 }

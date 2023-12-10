@@ -2,7 +2,7 @@
 
 import { SetStateAction, createContext, useContext, useState } from "react";
 
-export type values = "about" | "projects";
+export type values = "about" | "projects" | "contacts";
 type Context = {
   focus: values;
   setFocus: React.Dispatch<SetStateAction<values>>;
