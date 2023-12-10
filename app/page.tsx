@@ -123,7 +123,6 @@ export default function Home() {
       <main className="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
         <Section
           value="about"
-          amount="all"
           id="about"
           className="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
         >

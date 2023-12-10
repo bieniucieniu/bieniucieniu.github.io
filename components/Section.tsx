@@ -19,7 +19,8 @@ export default function Section({
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, {
     once: false,
-    amount: amount || 0.5,
+    amount: amount || "all",
+    margin: "45% 0px 45% 0px",
   });
 
   const Comp = asChild ? Slot : "section";
