@@ -22,6 +22,7 @@ export default function Spotlight({ className }: { className?: string }) {
   }
 
   useEffect(() => {
+    if (window.innerWidth < 1000) return;
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
