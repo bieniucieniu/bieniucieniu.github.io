@@ -2,6 +2,7 @@ import Section from "@/components/Section";
 import Nav from "@/components/Nav";
 import { Github, Linkedin, Mail, MoveUpRight } from "lucide-react";
 import NextLink from "next/link";
+import { twMerge } from "tailwind-merge";
 function Link({
   href,
   ...props
@@ -17,6 +18,7 @@ const projects: {
   title: string;
   content: React.ReactNode;
   tags: string[];
+  status?: ("finished" | "suspended" | "in progress" | "not hosted")[];
   link?: string;
   repo?: string;
 }[] = [
@@ -28,14 +30,15 @@ const projects: {
           the admin page.
 `,
     tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
+    status: ["in progress"],
     link: "https://braciabien.pl/",
     repo: "https://github.com/bieniucieniu/bracia-bien",
   },
   {
     title: "Breakout",
-    content: `This is a replica of the classic breakout game. It also has a
-                ‘gravity’ version, but it performs poorly.`,
+    content: `2D/3D game leveraging vanilla React and the react-three-fiber library for 3D rendering with  JSX templating and React. Implemented 2D physics with react and utilities from three-fibe and state management with zustand.`,
     tags: ["TypeScript", "three.js", "vanilla-extract-css"],
+    status: ["finished"],
     link: "https://breakout.bieniucieniu.pl/",
     repo: "https://github.com/bieniucieniu/breakout",
   },
@@ -47,6 +50,7 @@ const projects: {
                 is that the content in the window can be rendered on the Next.js
                 server.`,
     tags: ["Next.js", "Framer Motion"],
+    status: ["suspended"],
     link: "https://previous.bieniucieniu.pl",
     repo: "https://github.com/bieniucieniu/portfolio-website",
   },
@@ -54,6 +58,7 @@ const projects: {
     title: "Midar",
     content: "IT company website, currently in production.",
     tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
+    status: ["suspended"],
     link: "https://midar.bieniucieniu.pl/",
     repo: "https://github.com/bieniucieniu/midar-astro",
   },
@@ -62,6 +67,7 @@ const projects: {
     content: `This is my first real project with vanilla JS/TS, which utilizes
                 HTML canvas to visualize four sorting algorithms.`,
     tags: ["vanilla js", "TypeScript"],
+    status: ["finished"],
     link: "https://sorting.bieniucieniu.pl/",
     repo: "https://github.com/bieniucieniu/sorting",
   },
@@ -71,6 +77,7 @@ const projects: {
                   Weather API to display the temperature, weather condition and
                   wind speed.`,
     tags: ["Angular"],
+    status: ["suspended"],
     link: "https://weather-app.bieniucieniu.pl/",
     repo: "https://github.com/bieniucieniu/weather-app-angular",
   },
@@ -78,6 +85,7 @@ const projects: {
     title: "no esta bien",
     content: `puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.`,
     tags: ["Go", "Go Fiber", "html", "css"],
+    status: ["suspended", "not hosted"],
     link: "https://github.com/bieniucieniu/noestabien",
     repo: "https://github.com/bieniucieniu/noestabien",
   },
@@ -155,26 +163,52 @@ export default function Home() {
               Projects
             </h2>
             <ul className="flex flex-col pl-10 group">
-              {projects.map(({ title, content, tags, link, repo }) => {
+              {projects.map(({ title, content, tags, link, repo, status }) => {
                 return (
                   <Link
                     key={title}
                     {...(link ? { target: "_blank", href: link } : null)}
                   >
                     <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:bg-slate-300/10 hover:!opacity-100 group-hover:opacity-60 transition-all">
-                      <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow pb-3 group-hover/item:text-teal-400  transition-colors">
-                        {title}
-                        <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
-                      </h2>
+                      <div className="flex items-center pb-3 justify-between">
+                        <h2 className="flex items-center gap-x-1 font-bold text-lg drop-shadow group-hover/item:text-teal-400  transition-colors">
+                          {title}
+                          <MoveUpRight className="h-3 w-3 opacity-70 group-hover/item:opacity-90 group-hover/item:translate-x-1 group-hover/item:-translate-y-1 transition-transform" />
+                        </h2>
+                        {status ? (
+                          <ul className="flex gap-x-2">
+                            {status.map((tag, i) => (
+                              <li
+                                key={title + tag + i}
+                                className={twMerge(
+                                  "rounded-full flex items-center font-bold backdrop-blur-md text-xs px-2 py-1 transition-colors",
+                                  {
+                                    finished:
+                                      "bg-lime-300/10 group-hover/item:bg-lime-300/50",
+                                    suspended:
+                                      "bg-orange-600/10 group-hover/item:bg-orange-600/50",
+                                    "in progress":
+                                      "bg-sky-600/10 group-hover/item:bg-sky-600/50",
+                                    "not hosted":
+                                      "bg-slate-300/10 group-hover/item:bg-slate-300/50",
+                                  }[tag],
+                                )}
+                              >
+                                {tag}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
                       <p className="text-sm text-slate-400 group-hover/item:text-slate-300">
                         {content}
                       </p>
                       <div className="flex justify-between pt-3">
-                        <ul className="flex gap-x-2 ">
+                        <ul className="flex gap-x-2">
                           {tags.map((tag, i) => (
                             <li
                               key={title + tag + i}
-                              className="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
+                              className="rounded-full flex items-center font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1"
                             >
                               {tag}
                             </li>
