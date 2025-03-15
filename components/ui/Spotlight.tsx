@@ -1,49 +1,69 @@
 "use client";
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { useEffect } from "react";
+import { isTouchDevice } from "@/lib/touch";
+import {
+	type SpringOptions,
+	frame,
+	motion,
+	useMotionTemplate,
+	useSpring,
+} from "framer-motion";
+import { type RefObject, useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-export default function Spotlight({ className }: { className?: string }) {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const left = useMotionValue(0);
-  const top = useMotionValue(0);
+const spring: SpringOptions = {
+	bounce: 0,
+	stiffness: 50,
+	restDelta: 0.001,
+};
+export type SpotlightProps = {
+	className?: string;
+	spring?: SpringOptions;
+};
 
-  function refCallback(e: HTMLDivElement | null) {
-    if (!e) return;
-    const { left: l, top: t } = e.getBoundingClientRect();
-    left.set(l);
-    top.set(t);
-  }
+export default function Spotlight(props: SpotlightProps) {
+	return isTouchDevice() ? null : <MouseFollowingSpotlight {...props} />;
+}
+export function MouseFollowingSpotlight(props: SpotlightProps) {
+	const ref = useRef<HTMLDivElement>(null);
 
-  function handleMouseMove({ clientX, clientY }: MouseEvent) {
-    mouseX.set(clientX - left.get());
-    mouseY.set(clientY - top.get());
-  }
+	const [x, y] = useFollowPoiner(ref, props.spring ?? spring);
 
-  useEffect(() => {
-    if (window.innerWidth < 1000) return;
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  return (
-    <div
-      ref={refCallback}
-      className={twMerge("group overflow-hidden", className)}
-    >
-      <motion.div
-        className="pointer-events-none absolute -inset-px transition"
-        style={{
-          background: useMotionTemplate`
+	return (
+		<div
+			ref={ref}
+			className={twMerge("group overflow-hidden", props.className)}
+		>
+			<motion.div
+				className="pointer-events-none absolute -inset-px transition"
+				style={{
+					background: useMotionTemplate`
             radial-gradient(
-              650px circle at ${mouseX}px ${mouseY}px,
+              650px circle at ${x}px ${y}px,
               rgba(45, 77, 166, 0.15),
               transparent 100%
             )
           `,
-        }}
-      />
-    </div>
-  );
+				}}
+			/>
+		</div>
+	);
+}
+
+function useFollowPoiner(ref: RefObject<Element | null>, opt?: SpringOptions) {
+	const x = useSpring(0, opt);
+	const y = useSpring(0, opt);
+
+	useEffect(() => {
+		const handleMouseMove = ({ clientX, clientY }: MouseEvent) =>
+			frame.read(() => {
+				if (!ref.current) return;
+				const { left, top } = ref.current.getBoundingClientRect();
+				x.set(clientX - left);
+				y.set(clientY - top);
+			});
+		if (window.innerWidth < 1000) return;
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => window.removeEventListener("mousemove", handleMouseMove);
+	}, [x, y]);
+	return [x, y];
 }

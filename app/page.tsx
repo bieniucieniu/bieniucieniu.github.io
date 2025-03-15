@@ -35,7 +35,7 @@ const projects: Project[] = [
 	{
 		title: "Breakout",
 		content: `2D/3D game leveraging vanilla React and the react-three-fiber library for 3D rendering with  JSX templating and React. Implemented 2D physics with react and utilities from three-fibe and state management with zustand.`,
-		tags: ["TypeScript", "three.js", "vanilla-extract-css"],
+		tags: ["three.js", "vanilla-extract-css"],
 		status: ["finished"],
 		link: "https://breakout.bieniucieniu.pl/",
 		repo: "https://github.com/bieniucieniu/breakout",
@@ -64,7 +64,7 @@ const projects: Project[] = [
 		title: "sorting",
 		content: `This is my first real project with vanilla JS/TS, which utilizes
                 HTML canvas to visualize four sorting algorithms.`,
-		tags: ["vanilla js", "TypeScript"],
+		tags: ["vanilla js"],
 		status: ["finished"],
 		link: "https://sorting.bieniucieniu.pl/",
 		repo: "https://github.com/bieniucieniu/sorting",
@@ -155,7 +155,7 @@ function Header() {
 					Mikołaj Bień
 				</h1>
 				<h3 className="text-xl font-normal text-slate-400 drop-shadow-sm">
-					juniot Front-end developer
+					Front-end developer
 				</h3>
 				<div className="flex flex-row gap-x-4 py-2">
 					<Link
