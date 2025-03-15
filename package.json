@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
+    "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
     "framer-motion": "latest",
     "lucide-react": "latest",
     "next": "15.2.2",

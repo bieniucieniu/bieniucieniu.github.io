@@ -19,7 +19,7 @@ export default function RootLayout({
 		<html className="scroll-smooth" lang="en">
 			<body className={lato.className}>
 				<div className={"relative min-h-screen bg-slate-900 text-slate-200"}>
-					<Spotlight className="fixed inset-0" />
+					<Spotlight withToggle className="fixed inset-0" />
 					{children}
 				</div>
 			</body>

@@ -2,12 +2,20 @@
 import { isTouchDevice } from "@/lib/touch";
 import {
 	type SpringOptions,
+	easeIn,
 	frame,
 	motion,
 	useMotionTemplate,
 	useSpring,
 } from "framer-motion";
-import { type RefObject, useEffect, useRef } from "react";
+import {
+	type RefObject,
+	createElement,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import { createPortal } from "react-dom";
 import { twMerge } from "tailwind-merge";
 
 const spring: SpringOptions = {
@@ -20,8 +28,45 @@ export type SpotlightProps = {
 	spring?: SpringOptions;
 };
 
-export default function Spotlight(props: SpotlightProps) {
-	return isTouchDevice() ? null : <MouseFollowingSpotlight {...props} />;
+export type ToggleProps = {
+	toggle(fn: (prev: boolean) => boolean): void;
+	enabled: boolean;
+};
+export function DefaultToggle(props: ToggleProps) {
+	return createPortal(
+		<button
+			className="fixed top-0 left-0 text-"
+			onClick={() => props.toggle((v) => !v)}
+		>
+			Spotlight {props.enabled ? "on" : "off"}
+		</button>,
+		document.body,
+	);
+}
+
+export default function Spotlight(
+	props: SpotlightProps & {
+		withToggle?: boolean | ((props: ToggleProps) => React.ReactNode);
+	},
+) {
+	const [enabled, setEnabled] = useState(!isTouchDevice());
+	return (
+		isTouchDevice() || (
+			<>
+				{props.withToggle &&
+					createElement<ToggleProps>(
+						typeof props.withToggle === "function"
+							? props.withToggle
+							: DefaultToggle,
+						{
+							enabled: enabled,
+							toggle: setEnabled,
+						},
+					)}
+				{enabled && <MouseFollowingSpotlight {...props} />}
+			</>
+		)
+	);
 }
 export function MouseFollowingSpotlight(props: SpotlightProps) {
 	const ref = useRef<HTMLDivElement>(null);
