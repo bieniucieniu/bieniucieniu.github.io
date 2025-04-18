@@ -2,7 +2,6 @@
 import { isTouchDevice } from "@/lib/touch";
 import {
 	type SpringOptions,
-	easeIn,
 	frame,
 	motion,
 	useMotionTemplate,
@@ -33,14 +32,17 @@ export type ToggleProps = {
 	enabled: boolean;
 };
 export function DefaultToggle(props: ToggleProps) {
-	return createPortal(
-		<button
-			className="fixed top-0 left-0 text-"
-			onClick={() => props.toggle((v) => !v)}
-		>
-			Spotlight {props.enabled ? "on" : "off"}
-		</button>,
-		document.body,
+	return (
+		typeof document !== "undefined" &&
+		createPortal(
+			<button
+				className="fixed top-0 left-0 text-"
+				onClick={() => props.toggle((v) => !v)}
+			>
+				Spotlight {props.enabled ? "on" : "off"}
+			</button>,
+			document.body,
+		)
 	);
 }
 
@@ -97,7 +99,6 @@ export function MouseFollowingSpotlight(props: SpotlightProps) {
 function useFollowPoiner(ref: RefObject<Element | null>, opt?: SpringOptions) {
 	const x = useSpring(0, opt);
 	const y = useSpring(0, opt);
-
 	useEffect(() => {
 		const handleMouseMove = ({ clientX, clientY }: MouseEvent) =>
 			frame.read(() => {
@@ -109,6 +110,6 @@ function useFollowPoiner(ref: RefObject<Element | null>, opt?: SpringOptions) {
 		if (window.innerWidth < 1000) return;
 		window.addEventListener("mousemove", handleMouseMove);
 		return () => window.removeEventListener("mousemove", handleMouseMove);
-	}, [x, y]);
+	}, [x, y, ref]);
 	return [x, y];
 }

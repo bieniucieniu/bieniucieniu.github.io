@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
-import Spotlight from "@/components/ui/Spotlight";
+import dynamic from "next/dynamic";
+
+const Spotlight = dynamic(() => import("@/components/ui/Spotlight"));
 
 const lato = Lato({ subsets: ["latin-ext"], weight: ["400", "700", "900"] });
 
@@ -15,6 +17,9 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
+
+
+
 	return (
 		<html className="scroll-smooth" lang="en">
 			<body className={lato.className}>
