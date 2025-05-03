@@ -4,8 +4,6 @@ import { twMerge } from "tailwind-merge";
 type Link = { href: `${"#" | "https://"}${string}`; text: string };
 const links: Link[] = [
   {
-
-
     href: "#about",
     text: "ABOUT",
   },
@@ -34,7 +32,7 @@ function LinkCard(props: Link) {
           className={
             "inline-block h-px w-9 bg-slate-600 mr-4 transition-all group-active:bg-slate-100  group-active:w-14 group-hover:bg-slate-400 group-hover:w-14"
           }
-        ></span>
+        />
         <span
           className={
             "text-slate-500 font-black transition-all text-md group-hover:text-slate-300 group-active:text-slate-100"
