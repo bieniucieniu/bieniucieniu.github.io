@@ -9,7 +9,10 @@
     "ignoreUnknown": true
   },
   "formatter": {
-    "ignore": ["node_modules", ".next"],
+    "ignore": [
+      "node_modules",
+      ".next"
+    ],
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2
@@ -18,7 +21,9 @@
     "enabled": true
   },
   "linter": {
-    "ignore": ["node_modules"],
+    "ignore": [
+      "node_modules"
+    ],
     "enabled": true,
     "rules": {
       "recommended": true,
@@ -27,6 +32,7 @@
         "useJsxKeyInIterable": "off"
       },
       "suspicious": {
+        "noAssignInExpressions": "off",
         "noExplicitAny": "off"
       }
     }

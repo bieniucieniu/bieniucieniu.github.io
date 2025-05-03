@@ -1,5 +1,5 @@
 import type { Url } from "node:url";
-import Nav from "@/components/Nav";
+import Nav from "@/components/nav";
 import { Github } from "@/components/ui/icons/github";
 import { MoveUpRight } from "lucide-react";
 import NextLink from "next/link";

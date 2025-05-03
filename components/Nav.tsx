@@ -1,46 +1,30 @@
 "use client";
 import { twMerge } from "tailwind-merge";
+import { LinkCard } from "./ui/client";
+import type { Link } from "./ui/link-card";
 
-type Link = { href: `${"#" | "https://"}${string}`; text: string };
 const links: Link[] = [
   {
-    href: "#about",
-    text: "ABOUT",
+    id: "about",
+    text: "about",
   },
   {
-    href: "#projects",
-    text: "PROJECTS",
+    id: "projects",
+    text: "projects",
   },
   {
-    href: "#contacts",
-    text: "CONTACTS",
+    id: "contacts",
+    text: "contacts",
   },
 ];
 export default function Nav({ className }: { className?: string }) {
   return (
     <nav className={twMerge(className)}>
-      <ul className="w-max">{links.map(LinkCard)}</ul>
+      <ul className="w-max">
+        {links.map((props) => (
+          <LinkCard key={props.id} id={props.id} text={props.text} />
+        ))}
+      </ul>
     </nav>
-  );
-}
-
-function LinkCard(props: Link) {
-  return (
-    <li key={props.href}>
-      <a href={props.href} className="group flex flex-row items-center py-2">
-        <span
-          className={
-            "inline-block h-px w-9 bg-slate-600 mr-4 transition-all group-active:bg-slate-100  group-active:w-14 group-hover:bg-slate-400 group-hover:w-14"
-          }
-        />
-        <span
-          className={
-            "text-slate-500 font-black transition-all text-md group-hover:text-slate-300 group-active:text-slate-100"
-          }
-        >
-          {props.text}
-        </span>
-      </a>
-    </li>
   );
 }

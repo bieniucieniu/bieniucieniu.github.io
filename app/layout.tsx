@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
-import dynamic from "next/dynamic";
-
-const Spotlight = dynamic(() => import("@/components/ui/Spotlight"));
+import { Spotlight } from "@/components/ui/client";
 
 const lato = Lato({ subsets: ["latin-ext"], weight: ["400", "700", "900"] });
 
