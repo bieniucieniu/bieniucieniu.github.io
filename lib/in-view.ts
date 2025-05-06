@@ -1,14 +1,13 @@
-import { inView } from "framer-motion/dom";
+import { type ElementOrSelector, inView } from "framer-motion/dom";
 import { useEffect } from "react";
-import { updatePocketState, useCreatePocket, usePocketState } from "./pocket";
+import { useCreatePocket, usePocketState } from "./pocket";
 
-export function useListenInView(id: string): boolean {
-  // const [state, setState] = useState<boolean>(false);
+export function useListenInView(id: ElementOrSelector): boolean {
   const p = useCreatePocket(false);
   useEffect(() => {
     return inView(id, (_, e) => {
-      updatePocketState(p, e.isIntersecting);
-      return (e) => updatePocketState(p, e.isIntersecting);
+      p.update(e.isIntersecting);
+      return (e) => p.update(e.isIntersecting);
     });
   }, [id, p]);
   return usePocketState(p);
