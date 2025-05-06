@@ -4,6 +4,7 @@ import { Github } from "@/components/ui/icons/github";
 import { MoveUpRight } from "lucide-react";
 import NextLink from "next/link";
 
+import { type Project, contacts, projects } from "@/lib/data";
 import { createElement } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -12,86 +13,6 @@ function Link(
 ) {
   return createElement(props.href ? NextLink : "a", props as any);
 }
-
-type Project = {
-  title: string;
-  content: React.ReactNode;
-  tags: string[];
-  status?: ("finished" | "suspended" | "in progress" | "not hosted")[];
-  link?: string;
-  repo?: string;
-};
-const projects: Project[] = [
-  {
-    title: "Bracia Bien",
-    content: `
-          This is a web page for my father’s shop. It features fully dynamic
-          images stored on a bucket and managed through a Postgres database on
-          the admin page.
-`,
-    tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
-    status: ["in progress"],
-    link: "https://braciabien.pl/",
-    repo: "https://github.com/bieniucieniu/bracia-bien",
-  },
-  {
-    title: "Breakout",
-    content:
-      "2D/3D game leveraging vanilla React and the react-three-fiber library for 3D rendering with  JSX templating and React. Implemented 2D physics with react and utilities from three-fibe and state management with zustand.",
-    tags: ["three.js", "vanilla-extract-css"],
-    status: ["finished"],
-    link: "https://breakout.bieniucieniu.pl/",
-    repo: "https://github.com/bieniucieniu/breakout",
-  },
-
-  {
-    title: "previous Portfolio",
-    content: `This used to be my personal website, which features a ‘window manager’.
-                An interesting aspect of this website
-                is that the content in the window can be rendered on the Next.js
-                server.`,
-    tags: ["Next.js", "Framer Motion"],
-    status: ["suspended"],
-    link: "https://previous.bieniucieniu.pl",
-    repo: "https://github.com/bieniucieniu/portfolio-website",
-  },
-  {
-    title: "webisite template",
-    content: "IT company website template.",
-    tags: ["Next.js 13", "Shadcn-UI ", "Framer Motion"],
-    status: ["suspended"],
-    link: "https://midar.bieniucieniu.pl/",
-    repo: "https://github.com/bieniucieniu/midar-astro",
-  },
-  {
-    title: "sorting",
-    content: `This is my first real project with vanilla JS/TS, which utilizes
-                HTML canvas to visualize four sorting algorithms.`,
-    tags: ["vanilla js"],
-    status: ["finished"],
-    link: "https://sorting.bieniucieniu.pl/",
-    repo: "https://github.com/bieniucieniu/sorting",
-  },
-  {
-    title: "weather app",
-    content: `This is my only project that uses Angular. It utilizes the Open
-                  Weather API to display the temperature, weather condition and
-                  wind speed.`,
-    tags: ["Angular"],
-    status: ["suspended"],
-    link: "https://weather-app.bieniucieniu.pl/",
-    repo: "https://github.com/bieniucieniu/weather-app-angular",
-  },
-  {
-    title: "no esta bien",
-    content:
-      "puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.",
-    tags: ["Go", "Go Fiber", "html", "css"],
-    status: ["suspended", "not hosted"],
-    link: "https://github.com/bieniucieniu/noestabien",
-    repo: "https://github.com/bieniucieniu/noestabien",
-  },
-];
 
 export default function Home() {
   return (
@@ -162,27 +83,18 @@ function Header() {
           Front-end developer
         </h3>
         <div className="flex flex-row gap-x-4 py-2">
-          <Link
-            className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-            href="mailto:bienmikolaj@gmail.com"
-            target="_blank"
-          >
-            bienmikolaj@gmail.com
-          </Link>
-          <Link
-            className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-            href="https://github.com/bieniucieniu"
-            target="_blank"
-          >
-            github
-          </Link>
-          <Link
-            className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-            href="https://www.linkedin.com/in/mikołaj-bień-6090b2237"
-            target="_blank"
-          >
-            linkedin
-          </Link>
+          {contacts.map((c) => {
+            return (
+              <Link
+                key={c.label}
+                className="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
+                href={c.href}
+                target="_blank"
+              >
+                {c.label}
+              </Link>
+            );
+          })}
         </div>
         <Nav />
       </div>
@@ -197,36 +109,19 @@ function Footer() {
         Contacts
       </h2>
       <ul className="pl-10 text-lg font-bold group">
-        <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all">
-          <span className="">github: </span>
-          <Link
-            className="text-teal-500 hover:underline"
-            href="https://github.com/bieniucieniu"
-            target="_blank"
-          >
-            github.com/bieniucieniu
-          </Link>
-        </li>
-        <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all">
-          mail:{" "}
-          <Link
-            className="text-teal-500 hover:underline"
-            href="mailto:bienmikolaj@gmail.com"
-            target="_blank"
-          >
-            bienmikolaj@gmail.com
-          </Link>
-        </li>
-        <li className="p-3 rounded-lg drop-shadow-xl backdrop-blur-md opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all">
-          linkedin:{" "}
-          <Link
-            className="text-teal-500 hover:underline"
-            href="https://www.linkedin.com/in/mikołaj-bień-6090b2237"
-            target="_blank"
-          >
-            www.linkedin.com/in/mikołaj-bień-6090b2237
-          </Link>
-        </li>
+        {contacts.map((c) => {
+          return (
+            <li
+              key={c.label}
+              className="opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all"
+            >
+              <Link className="flex flex-col" href={c.href} target="_blank">
+                <span className="hover:underline">{c.label}</span>
+                <span className="text-sm opacity-40">{c.hrefLabel}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </footer>
   );
