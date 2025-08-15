@@ -37,7 +37,7 @@ export function DefaultToggle(props: ToggleProps) {
     createPortal(
       <button
         type="button"
-        className="fixed top-0 left-0 text-"
+        className="fixed top-0 left-0 opacity-70"
         onClick={() => props.toggle((v) => !v)}
       >
         Spotlight {props.enabled ? "on" : "off"}
@@ -52,23 +52,23 @@ export default function Spotlight(
     withToggle?: boolean | ((props: ToggleProps) => React.ReactNode);
   },
 ) {
-  const [enabled, setEnabled] = useState(!isTouchDevice());
+  if (isTouchDevice()) return null;
+
+  const [enabled, setEnabled] = useState(true);
   return (
-    isTouchDevice() || (
-      <>
-        {props.withToggle &&
-          createElement<ToggleProps>(
-            typeof props.withToggle === "function"
-              ? props.withToggle
-              : DefaultToggle,
-            {
-              enabled: enabled,
-              toggle: setEnabled,
-            },
-          )}
-        {enabled && <MouseFollowingSpotlight {...props} />}
-      </>
-    )
+    <>
+      {props.withToggle &&
+        createElement<ToggleProps>(
+          typeof props.withToggle === "function"
+            ? props.withToggle
+            : DefaultToggle,
+          {
+            enabled: enabled,
+            toggle: setEnabled,
+          },
+        )}
+      {enabled && <MouseFollowingSpotlight {...props} />}
+    </>
   );
 }
 export function MouseFollowingSpotlight(props: SpotlightProps) {
