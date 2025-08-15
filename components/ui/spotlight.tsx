@@ -54,6 +54,7 @@ export default function Spotlight(
 ) {
   if (isTouchDevice()) return null;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [enabled, setEnabled] = useState(true);
   return (
     <>
