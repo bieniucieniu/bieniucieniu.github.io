@@ -8,13 +8,20 @@ export type Project = {
 };
 export const projects: Project[] = [
   {
+    title: "ball",
+    content: "zig + raylib balls physics simulation",
+    status: ["in progress", "not hosted"],
+    tags: ["zig", "raylib"],
+    repo: "https://github.com/bieniucieniu/bracia-bien",
+  },
+  {
     title: "Bracia Bien",
     content: `
           This is a web page for my father’s shop. It features fully dynamic
           images stored on a bucket and managed through a Postgres database on
           the admin page.
 `,
-    tags: ["Next.js 13", " Shadcn-UI ", " Framer Motion"],
+    tags: ["next.js 13", "shadcn", " framer motion"],
     status: ["in progress"],
     link: "https://braciabien.pl/",
     repo: "https://github.com/bieniucieniu/bracia-bien",
@@ -35,7 +42,7 @@ export const projects: Project[] = [
                 An interesting aspect of this website
                 is that the content in the window can be rendered on the Next.js
                 server.`,
-    tags: ["Next.js", "Framer Motion"],
+    tags: ["next.js", "framer motion"],
     status: ["suspended"],
     link: "https://previous.bieniucieniu.pl",
     repo: "https://github.com/bieniucieniu/portfolio-website",
@@ -71,7 +78,7 @@ export const projects: Project[] = [
     title: "no esta bien",
     content:
       "puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.",
-    tags: ["Go", "Go Fiber", "html", "css"],
+    tags: ["go", "go fiber", "html", "css"],
     status: ["suspended", "not hosted"],
     link: "https://github.com/bieniucieniu/noestabien",
     repo: "https://github.com/bieniucieniu/noestabien",
