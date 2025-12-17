@@ -1,6 +1,6 @@
 import { useState, useSyncExternalStore } from "react";
 
-class Pocket<T> {
+class SharedState<T> {
   private listeners: Set<() => void>;
   state: T;
   constructor(state: T) {
@@ -23,21 +23,21 @@ class Pocket<T> {
   }
 }
 export type Setter<T> = <U extends T>(v: U) => void;
-export type { Pocket };
+export type { SharedState };
 
-export function createPocket<T>(state: T): Pocket<T> {
-  return new Pocket(state);
+export function createSharedState<T>(state: T): SharedState<T> {
+  return new SharedState(state);
 }
 
-export function usePocket<T>(p: Pocket<T>): [state: T, setter: Setter<T>] {
-  return [usePocketState(p), p.update];
+export function useShared<T>(p: SharedState<T>): [state: T, setter: Setter<T>] {
+  return [useSharedState(p), p.update];
 }
 
-export function useCreatePocket<T>(state: T): Pocket<T> {
-  return useState(() => createPocket(state))[0];
+export function useCreateSharedState<T>(state: T): SharedState<T> {
+  return useState(() => createSharedState(state))[0];
 }
 
-export function usePocketState<T>(o: Pocket<T>): T {
+export function useSharedState<T>(o: SharedState<T>): T {
   return useSyncExternalStore(
     (fn) => o.subscribe(fn),
     () => o.state,

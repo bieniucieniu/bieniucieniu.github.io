@@ -1,5 +1,5 @@
 import { createContext, use } from "react";
-import { type Pocket, createPocket } from "..";
+import { type SharedState, createSharedState } from "..";
 
 interface GetSet<K, V> {
   delete(key: K): boolean;
@@ -16,17 +16,17 @@ export function useStorePocket<T = unknown>(
   key: any,
   state: T,
   store?: Store,
-): Pocket<T>;
+): SharedState<T>;
 export function useStorePocket<T = unknown>(
   key: any,
   state: T,
   pStore?: Store,
-): Pocket<T> {
+): SharedState<T> {
   const store = pStore || use(context);
 
-  let s: Pocket<any> = store.get(key);
+  let s: SharedState<any> = store.get(key);
   if (!s) {
-    store.set(key, (s = createPocket(state)));
+    store.set(key, (s = createSharedState(state)));
   }
 
   return s;
