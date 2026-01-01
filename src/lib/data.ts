@@ -1,6 +1,8 @@
+import { JSX } from "solid-js";
+
 export type Project = {
   title: string;
-  content: React.ReactNode;
+  content: JSX.Element;
   tags: string[];
   status?: ("finished" | "suspended" | "in progress" | "not hosted")[];
   link?: string;
