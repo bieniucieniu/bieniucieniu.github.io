@@ -29,6 +29,9 @@
 			"quoteStyle": "double"
 		}
 	},
+	"html": {
+		"experimentalFullSupportEnabled": true
+	},
 	"assist": {
 		"enabled": true,
 		"actions": {

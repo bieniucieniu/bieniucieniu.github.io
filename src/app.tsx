@@ -1,8 +1,8 @@
-import { Router } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start/router";
+import { Route, Router } from "@solidjs/router";
 import { Suspense } from "solid-js";
-import "./app.css";
 import Spotlight from "./components/spotlight";
+import Home from "./routes";
+import NotFound from "./routes/[...404]";
 
 export default function App() {
 	return (
@@ -14,7 +14,8 @@ export default function App() {
 				</>
 			)}
 		>
-			<FileRoutes />
+			<Route path="/" component={Home} />
+			<Route path="*404" component={NotFound} />
 		</Router>
 	);
 }
