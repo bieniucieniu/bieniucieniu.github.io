@@ -10,6 +10,14 @@ export type Project = {
 };
 export const projects: Project[] = [
 	{
+		title: "kong",
+		content:
+			"ai agent with a chatbot and integration with git hosting (github, gitea) and posibly with smart home automation",
+		tags: ["kotlin", "koog", "shadcn-ui", "tanstack"],
+		status: ["in progress", "not hosted"],
+		repo: "https://github.com/bieniucieniu/kong",
+	},
+	{
 		title: "ball",
 		content: "zig + raylib balls physics simulation",
 		status: ["in progress", "not hosted"],

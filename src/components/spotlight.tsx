@@ -74,7 +74,7 @@ export function MouseFollowingSpotlight(props: SpotlightProps) {
 			class={twMerge("group overflow-hidden", props.className)}
 		>
 			<div
-				class="pointer-events-none absolute -inset-px transition"
+				class="pointer-events-none absolute inset-0 transition"
 				style={{
 					background: `
             radial-gradient(
@@ -90,8 +90,8 @@ export function MouseFollowingSpotlight(props: SpotlightProps) {
 }
 
 function useFollowPoiner(ref: Accessor<Element | null>, opt?: SpringOptions) {
-	const [x, setX] = createSpringSignal(0, opt);
-	const [y, setY] = createSpringSignal(0, opt);
+	const [x, setX] = createSpringSignal(window.innerWidth / 2, opt);
+	const [y, setY] = createSpringSignal(window.innerHeight / 2, opt);
 	onMount(() => {
 		const e = ref();
 		if (!e) return;
