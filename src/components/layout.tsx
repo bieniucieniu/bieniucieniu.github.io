@@ -1,28 +1,15 @@
 import { A } from "@solidjs/router";
 import type { JSX } from "solid-js";
-import RouteLink from "~/components/route-link";
-import SectionLink from "~/components/section-link";
-import { HOME_SECTIONS, ScrollSpyProvider } from "~/lib/scroll-spy";
+import FileTreeNav from "~/components/file-tree-nav";
+import { ScrollSpyProvider } from "~/lib/scroll-spy";
 import { contacts } from "~/lib/data";
-
-const sectionLinks = [
-	{ id: "about", text: "about" },
-	{ id: "skills", text: "skills" },
-	{ id: "projects", text: "projects" },
-	{ id: "contacts", text: "contacts" },
-] as const satisfies ReadonlyArray<{ id: (typeof HOME_SECTIONS)[number]; text: string }>;
-
-const routeLinks = [
-	{ href: "/experience", text: "experience" },
-	{ href: "/tiptap", text: "tiptap" },
-] as const;
 
 export default function Layout(props: { children: JSX.Element }) {
 	return (
 		<ScrollSpyProvider>
 			<div class="max-w-(--breakpoint-xl) relative flex flex-col lg:flex-row lg:px-20 mx-4 sm:mx-20 lg:mx-auto">
 				<Header />
-				<main class="lg:w-1/2 flex flex-col gap-y-20 lg:py-24">
+				<main class="lg:flex-[0_0_50%] lg:min-w-0 flex flex-col gap-y-20 lg:py-24">
 					{props.children}
 				</main>
 			</div>
@@ -32,7 +19,7 @@ export default function Layout(props: { children: JSX.Element }) {
 
 function Header() {
 	return (
-		<header class="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+		<header class="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:flex-[0_0_50%] lg:min-w-0 lg:flex-col lg:justify-between lg:py-24">
 			<div>
 				<h1 class="font-black text-3xl sm:text-5xl leading-normal drop-shadow-sm">
 					<A href="/">Mikołaj Bień</A>
@@ -54,18 +41,9 @@ function Header() {
 						);
 					})}
 				</div>
-				<nav class="flex flex-col gap-y-6 pt-2">
-					<ul class="w-max">
-						{sectionLinks.map((link) => (
-							<SectionLink id={link.id} text={link.text} />
-						))}
-					</ul>
-					<ul class="w-max">
-						{routeLinks.map((link) => (
-							<RouteLink href={link.href} text={link.text} />
-						))}
-					</ul>
-				</nav>
+				<div class="pt-4">
+					<FileTreeNav />
+				</div>
 			</div>
 		</header>
 	);

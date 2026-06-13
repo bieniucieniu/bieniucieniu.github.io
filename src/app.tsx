@@ -4,7 +4,7 @@ import Spotlight from "./components/spotlight";
 import Home from "./routes";
 import NotFound from "./routes/[...404]";
 import Experience from "./routes/experience";
-import Tiptap from "./routes/tiptap";
+import Libs from "./routes/libs";
 
 export default function App() {
 	return (
@@ -18,7 +18,7 @@ export default function App() {
 		>
 			<Route path="/" component={Home} />
 			<Route path="/experience" component={Experience} />
-			<Route path="/tiptap" component={Tiptap} />
+			<Route path="/libs" component={Libs} />
 			<Route path="*404" component={NotFound} />
 		</Router>
 	);

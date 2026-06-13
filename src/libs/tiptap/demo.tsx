@@ -90,7 +90,7 @@ export default function TiptapDemo() {
 		],
 		content: `
       <h2>Tiptap Solid</h2>
-      <p>A minimal demo of <strong>tiptap-solid</strong> linked from this portfolio via a local package.</p>
+      <p>A minimal demo of <strong>tiptap-solid</strong> from the libs catalog.</p>
     `,
 	}));
 
