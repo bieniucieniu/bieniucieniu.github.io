@@ -6,6 +6,14 @@ const links: Link[] = [
 		text: "about",
 	},
 	{
+		id: "experience",
+		text: "experience",
+	},
+	{
+		id: "skills",
+		text: "skills",
+	},
+	{
 		id: "projects",
 		text: "projects",
 	},

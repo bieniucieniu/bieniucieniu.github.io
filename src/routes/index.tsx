@@ -2,7 +2,13 @@ import { A } from "@solidjs/router";
 import { createMemo, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 import Nav from "~/components/navbar";
-import { contacts, type Project, projects } from "~/lib/data";
+import {
+	contacts,
+	experiences,
+	type Project,
+	projects,
+	skillCategories,
+} from "~/lib/data";
 
 export default function Home() {
 	return (
@@ -10,11 +16,24 @@ export default function Home() {
 			<Header />
 			<main class="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
 				<section
-					//value="about"
 					id="about"
 					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
 				>
 					<About />
+				</section>
+
+				<section
+					id="experience"
+					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
+				>
+					<Experience />
+				</section>
+
+				<section
+					id="skills"
+					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
+				>
+					<Skills />
 				</section>
 
 				<section id="projects">
@@ -38,22 +57,77 @@ function About() {
 				About
 			</h2>
 			<p>
-				I have three years of experience in web development, specializing in
-				front-end technologies. I acquired my skills through self-study and
-				freelance projects in Poland.
+				Results-driven Web Developer with over 3 years of experience
+				specializing in scalable{" "}
+				<span class="font-bold text-slate-100">React</span> and{" "}
+				<span class="font-bold text-slate-100">TypeScript</span> applications.
+				Expert in the{" "}
+				<span class="font-bold text-slate-100">TanStack ecosystem</span> (Query,
+				Form, Table, Router) for efficient data management and UI/UX
+				optimization.
 			</p>
 			<p>
-				I mainly use <span class="font-bold text-slate-100">React</span> and{" "}
-				<span class="font-bold text-slate-100">TypeScript</span> with{" "}
-				<span class="font-bold text-slate-100">Next.js</span> as my preferred
-				tools for web development. I also employ various libraries and add-ons,
-				such as{" "}
-				<span class="font-bold text-slate-100">
-					React-Free-Fiber/drei, Radix-ui, framer-motion, tailwind,
-					vanilla-extract-css, zod, drizzle{" "}
-				</span>{" "}
-				and others.
+				Advanced DevOps expertise in building{" "}
+				<span class="font-bold text-slate-100">GitLab CI/CD</span> pipelines and
+				managing{" "}
+				<span class="font-bold text-slate-100">Kubernetes</span> clusters via
+				GitOps (<span class="font-bold text-slate-100">FluxCD</span>), delivering
+				end-to-end solutions for complex transport and internal logistics tools.
+				Experienced in cross-platform development with{" "}
+				<span class="font-bold text-slate-100">React Native</span> and{" "}
+				<span class="font-bold text-slate-100">Jetpack Compose</span>.
 			</p>
+		</>
+	);
+}
+
+function Experience() {
+	return (
+		<>
+			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
+				Experience
+			</h2>
+			<ul class="flex flex-col gap-y-8 pl-10">
+				{experiences.map((exp) => (
+					<li class="flex flex-col gap-y-2">
+						<div>
+							<h3 class="font-bold text-slate-100">{exp.role}</h3>
+							<p class="text-sm text-slate-400">
+								{exp.company} · {exp.period}
+							</p>
+						</div>
+						<ul class="list-disc list-outside ml-4 flex flex-col gap-y-1 text-sm">
+							{exp.highlights.map((item) => (
+								<li>{item}</li>
+							))}
+						</ul>
+					</li>
+				))}
+			</ul>
+		</>
+	);
+}
+
+function Skills() {
+	return (
+		<>
+			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
+				Skills
+			</h2>
+			<ul class="flex flex-col gap-y-4 pl-10">
+				{skillCategories.map((cat) => (
+					<li class="flex flex-col gap-y-2">
+						<h3 class="font-bold text-slate-100 text-sm">{cat.category}</h3>
+						<ul class="flex flex-wrap gap-2">
+							{cat.skills.map((skill) => (
+								<li class="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1">
+									{skill}
+								</li>
+							))}
+						</ul>
+					</li>
+				))}
+			</ul>
 		</>
 	);
 }
@@ -66,15 +140,16 @@ function Header() {
 					Mikołaj Bień
 				</h1>
 				<h3 class="text-xl font-normal text-slate-400 drop-shadow-sm">
-					Front-end developer
+					Web Developer
 				</h3>
-				<div class="flex flex-row gap-x-4 py-2">
+				<div class="flex flex-row flex-wrap gap-x-4 py-2">
 					{contacts.map((c) => {
+						const external = c.href.startsWith("http");
 						return (
 							<a
 								class="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
 								href={c.href}
-								target="_blank"
+								target={external ? "_blank" : undefined}
 							>
 								{c.label}
 							</a>
@@ -95,9 +170,14 @@ function Footer() {
 			</h2>
 			<ul class="pl-10 text-lg font-bold group">
 				{contacts.map((c) => {
+					const external = c.href.startsWith("http");
 					return (
 						<li class="opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all">
-							<A class="flex flex-col" href={c.href} target="_blank">
+							<A
+								class="flex flex-col"
+								href={c.href}
+								target={external ? "_blank" : undefined}
+							>
 								<span class="hover:underline">{c.label}</span>
 								<span class="text-sm opacity-40">{c.hrefLabel}</span>
 							</A>
@@ -162,6 +242,8 @@ function ProjectCard(props: Project) {
 											"bg-sky-600/10 group-hover/item:bg-sky-600/50",
 										"not hosted":
 											"bg-slate-300/10 group-hover/item:bg-slate-300/50",
+										"in production":
+											"bg-teal-500/10 group-hover/item:bg-teal-500/50",
 									}[tag],
 								)}
 							>
