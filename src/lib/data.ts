@@ -143,25 +143,6 @@ export const projects: Project[] = [
 		repo: "https://github.com/bieniucieniu/bracia-bien",
 	},
 	{
-		title: "previous Portfolio",
-		content: `This used to be my personal website, which features a 'window manager'.
-                An interesting aspect of this website
-                is that the content in the window can be rendered on the Next.js
-                server.`,
-		tags: ["next.js", "framer motion"],
-		status: ["suspended"],
-		link: "https://previous.bieniucieniu.pl",
-		repo: "https://github.com/bieniucieniu/portfolio-website",
-	},
-	{
-		title: "webisite template",
-		content: "IT company website template.",
-		tags: ["Next.js 13", "Shadcn-UI", "Framer Motion"],
-		status: ["suspended"],
-		link: "https://midar.bieniucieniu.pl/",
-		repo: "https://github.com/bieniucieniu/midar-astro",
-	},
-	{
 		title: "sorting",
 		content: `This is my first real project with vanilla JS/TS, which utilizes
                 HTML canvas to visualize four sorting algorithms.`,
