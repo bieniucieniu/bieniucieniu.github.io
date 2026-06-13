@@ -1,52 +1,36 @@
 import { A } from "@solidjs/router";
 import { createMemo, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
-import Nav from "~/components/navbar";
-import {
-	contacts,
-	experiences,
-	type Project,
-	projects,
-	skillCategories,
-} from "~/lib/data";
+import Layout, { Footer } from "~/components/layout";
+import { type Project, projects, skillCategories } from "~/lib/data";
 
 export default function Home() {
 	return (
-		<div class="max-w-(--breakpoint-xl) relative flex flex-col lg:flex-row lg:px-20 mx-4 sm:mx-20 lg:mx-auto">
-			<Header />
-			<main class="lg:w-1/2 flex flex-col gap-y-20 lg:py-24 ">
-				<section
-					id="about"
-					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-				>
-					<About />
-				</section>
+		<Layout>
+			<section
+				id="about"
+				class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
+			>
+				<About />
+			</section>
 
-				<section
-					id="experience"
-					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-				>
-					<Experience />
-				</section>
+			<section
+				id="skills"
+				class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
+			>
+				<Skills />
+			</section>
 
-				<section
-					id="skills"
-					class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-				>
-					<Skills />
-				</section>
-
-				<section id="projects">
-					<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-						Projects
-					</h2>
-					<ul class="flex flex-col pl-10 group">{projects.map(ProjectCard)}</ul>
-				</section>
-				<section id="contacts">
-					<Footer />
-				</section>
-			</main>
-		</div>
+			<section id="projects">
+				<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
+					Projects
+				</h2>
+				<ul class="flex flex-col pl-10 group">{projects.map(ProjectCard)}</ul>
+			</section>
+			<section id="contacts">
+				<Footer />
+			</section>
+		</Layout>
 	);
 }
 
@@ -81,33 +65,6 @@ function About() {
 	);
 }
 
-function Experience() {
-	return (
-		<>
-			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-				Experience
-			</h2>
-			<ul class="flex flex-col gap-y-8 pl-10">
-				{experiences.map((exp) => (
-					<li class="flex flex-col gap-y-2">
-						<div>
-							<h3 class="font-bold text-slate-100">{exp.role}</h3>
-							<p class="text-sm text-slate-400">
-								{exp.company} · {exp.period}
-							</p>
-						</div>
-						<ul class="list-disc list-outside ml-4 flex flex-col gap-y-1 text-sm">
-							{exp.highlights.map((item) => (
-								<li>{item}</li>
-							))}
-						</ul>
-					</li>
-				))}
-			</ul>
-		</>
-	);
-}
-
 function Skills() {
 	return (
 		<>
@@ -129,63 +86,6 @@ function Skills() {
 				))}
 			</ul>
 		</>
-	);
-}
-
-function Header() {
-	return (
-		<header class="opacity-80 lg:sticky lg:top-0 lg:left-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
-			<div>
-				<h1 class="font-black text-3xl sm:text-5xl leading-normal drop-shadow-sm">
-					Mikołaj Bień
-				</h1>
-				<h3 class="text-xl font-normal text-slate-400 drop-shadow-sm">
-					Web Developer
-				</h3>
-				<div class="flex flex-row flex-wrap gap-x-4 py-2">
-					{contacts.map((c) => {
-						const external = c.href.startsWith("http");
-						return (
-							<a
-								class="border-b border-transparent text-slate-500 hover:text-slate-100 hover:border-slate-100/70 transition-colors ease-out"
-								href={c.href}
-								target={external ? "_blank" : undefined}
-							>
-								{c.label}
-							</a>
-						);
-					})}
-				</div>
-				<Nav />
-			</div>
-		</header>
-	);
-}
-
-function Footer() {
-	return (
-		<footer>
-			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-				Contacts
-			</h2>
-			<ul class="pl-10 text-lg font-bold group">
-				{contacts.map((c) => {
-					const external = c.href.startsWith("http");
-					return (
-						<li class="opacity-80 group/item hover:opacity-100! group-hover:opacity-50 transition-all">
-							<A
-								class="flex flex-col"
-								href={c.href}
-								target={external ? "_blank" : undefined}
-							>
-								<span class="hover:underline">{c.label}</span>
-								<span class="text-sm opacity-40">{c.hrefLabel}</span>
-							</A>
-						</li>
-					);
-				})}
-			</ul>
-		</footer>
 	);
 }
 

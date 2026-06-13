@@ -11,18 +11,26 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/node": "^25.2.2",
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/node": "^25.9.3",
     "solid-devtools": "^0.34.5",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.3.1",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vite-plugin-solid": "^2.11.10"
+    "vite": "^7.3.5",
+    "vite-plugin-solid": "^2.11.12"
   },
   "dependencies": {
     "@solidjs/router": "^0.15.4",
+    "@tiptap/core": "^3.23.5",
+    "@tiptap/extension-placeholder": "^3.23.5",
+    "@tiptap/pm": "^3.23.5",
+    "@tiptap/starter-kit": "^3.23.5",
     "lucide-solid": "^0.562.0",
-    "solid-js": "^1.9.11",
-    "tailwind-merge": "^3.4.0"
-  }
+    "solid-js": "^1.9.13",
+    "tailwind-merge": "^3.6.0",
+    "tiptap-solid": "github:bieniucieniu/tiptap-solid"
+  },
+  "trustedDependencies": [
+    "tiptap-solid"
+  ]
 }

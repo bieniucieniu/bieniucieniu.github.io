@@ -190,9 +190,4 @@ export const contacts: Contact[] = [
 		href: "https://www.linkedin.com/in/mikołaj-bień-6090b2237",
 		hrefLabel: "www.linkedin.com/in/mikołaj-bień-6090b2237",
 	},
-	{
-		label: "+48 661 349 232",
-		href: "tel:+48661349232",
-		hrefLabel: "+48 661 349 232",
-	},
 ];
