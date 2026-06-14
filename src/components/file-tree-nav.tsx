@@ -30,8 +30,7 @@ function useIsActive(item: NavTreeItem) {
 		}
 		if (item.anchorId && item.href) {
 			return (
-				location.pathname === item.href &&
-				location.hash === `#${item.anchorId}`
+				location.pathname === item.href && location.hash === `#${item.anchorId}`
 			);
 		}
 		if (item.branchHref) {

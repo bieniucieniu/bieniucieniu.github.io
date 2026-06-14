@@ -22,7 +22,13 @@ export type Project = {
 	title: string;
 	content: JSX.Element;
 	tags: string[];
-	status?: ("finished" | "suspended" | "in progress" | "not hosted" | "in production")[];
+	status?: (
+		| "finished"
+		| "suspended"
+		| "in progress"
+		| "not hosted"
+		| "in production"
+	)[];
 	link?: string;
 	repo?: string;
 };
@@ -93,7 +99,13 @@ export const skillCategories: SkillCategory[] = [
 	},
 	{
 		category: "Backend & Libs",
-		skills: ["Go", "Kotlin", "TanStack Query", "TanStack Form", "TanStack Table"],
+		skills: [
+			"Go",
+			"Kotlin",
+			"TanStack Query",
+			"TanStack Form",
+			"TanStack Table",
+		],
 	},
 	{
 		category: "DevOps & Infrastructure",

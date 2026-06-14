@@ -20,7 +20,11 @@ export default function Experience() {
 					</ul>
 					<Show when={exp.projectCategories?.length}>
 						<ul class="flex flex-col gap-y-6">
-							<For each={exp.projectCategories!.filter((group) => group.projects.length)}>
+							<For
+								each={exp.projectCategories!.filter(
+									(group) => group.projects.length,
+								)}
+							>
 								{(group) => (
 									<li class="flex flex-col gap-y-3">
 										<h4 class="font-bold text-slate-100 text-sm">

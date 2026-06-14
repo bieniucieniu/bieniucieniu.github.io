@@ -1,8 +1,4 @@
-export const HOME_SECTIONS = [
-	"about",
-	"skills",
-	"contacts",
-] as const;
+export const HOME_SECTIONS = ["about", "skills", "contacts"] as const;
 
 export type HomeSectionId = (typeof HOME_SECTIONS)[number];
 

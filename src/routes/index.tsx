@@ -44,9 +44,9 @@ function About() {
 			<p>
 				Advanced DevOps expertise in building{" "}
 				<span class="font-bold text-slate-100">GitLab CI/CD</span> pipelines and
-				managing{" "}
-				<span class="font-bold text-slate-100">Kubernetes</span> clusters via
-				GitOps (<span class="font-bold text-slate-100">FluxCD</span>), delivering
+				managing <span class="font-bold text-slate-100">Kubernetes</span>{" "}
+				clusters via GitOps (
+				<span class="font-bold text-slate-100">FluxCD</span>), delivering
 				end-to-end solutions for complex transport and internal logistics tools.
 				Experienced in cross-platform development with{" "}
 				<span class="font-bold text-slate-100">React Native</span> and{" "}
