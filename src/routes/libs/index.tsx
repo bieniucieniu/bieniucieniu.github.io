@@ -1,9 +1,9 @@
 import { A } from "@solidjs/router";
-import { ErrorBoundary, Show, type Component, onMount } from "solid-js";
+import { type Component, ErrorBoundary, onMount } from "solid-js";
 import Layout from "~/components/layout";
 import NavPageHeader from "~/components/nav-page-header";
 import { scrollToAnchorWhenReady } from "~/lib/home-section";
-import { libs, type Lib } from "~/lib/libs-catalog";
+import { type Lib, libs } from "~/lib/libs-catalog";
 import { getNavChildren, libTitle, type NavTreeItem } from "~/lib/nav-tree";
 import TiptapDemo from "~/libs/tiptap/demo";
 import github from "/public/github-mark-white.svg?url";
@@ -26,11 +26,16 @@ export default function LibsPage() {
 		<Layout>
 			<section class="flex flex-col gap-y-4 leading-relaxed text-slate-300 font-normal opacity-80">
 				<NavPageHeader />
-				<ul class="flex flex-col pl-10 group gap-y-6">
-					{items.map((item) => (
-						<LibEntry item={item} lib={libs.find((lib) => lib.slug === item.name)!} />
-					))}
-				</ul>
+				<ErrorBoundary fallback={<p>Error loading libs</p>}>
+					<ul class="flex flex-col pl-10 group gap-y-6">
+						{items.map((item) => (
+							<LibEntry
+								item={item}
+								lib={libs.find((lib) => lib.slug === item.name)!}
+							/>
+						))}
+					</ul>
+				</ErrorBoundary>
 			</section>
 		</Layout>
 	);
@@ -38,6 +43,8 @@ export default function LibsPage() {
 
 function LibEntry(props: { item: NavTreeItem; lib: Lib }) {
 	const Demo = libDemos[props.lib.slug];
+
+	if (!Demo) throw new Error(`No demo for ${props.lib.slug}`);
 
 	return (
 		<li
@@ -73,15 +80,7 @@ function LibEntry(props: { item: NavTreeItem; lib: Lib }) {
 					<img src={github} alt="github" class="h-5 w-5 m-1" />
 				</A>
 			</div>
-			<Show when={Demo}>
-				{(Component) => (
-					<div class="pt-4">
-						<ErrorBoundary fallback={<></>}>
-							<Component />
-						</ErrorBoundary>
-					</div>
-				)}
-			</Show>
+			<Demo />
 		</li>
 	);
 }
