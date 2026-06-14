@@ -1,7 +1,6 @@
 export const HOME_SECTIONS = [
 	"about",
 	"skills",
-	"projects",
 	"contacts",
 ] as const;
 

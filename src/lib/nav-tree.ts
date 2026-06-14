@@ -18,7 +18,6 @@ export type NavTreeItem = {
 export const homeSections: NavTreeItem[] = [
 	{ name: "about", sectionId: "about" },
 	{ name: "skills", sectionId: "skills" },
-	{ name: "projects", sectionId: "projects" },
 	{ name: "contacts", sectionId: "contacts" },
 ];
 
@@ -31,6 +30,11 @@ export const navTree: NavTreeItem = {
 
 export const routeItems: NavTreeItem[] = [
 	{ name: "experience", href: "/experience" },
+	{
+		name: "projects",
+		href: "/projects",
+		description: "Personal and side projects.",
+	},
 	{
 		name: "libs",
 		href: "/libs",

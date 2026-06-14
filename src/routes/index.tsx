@@ -1,6 +1,5 @@
 import Layout, { Footer } from "~/components/layout";
-import ProjectCard from "~/components/project-card";
-import { projects, skillCategories } from "~/lib/data";
+import { skillCategories } from "~/lib/data";
 
 export default function Home() {
 	return (
@@ -19,16 +18,6 @@ export default function Home() {
 				<Skills />
 			</section>
 
-			<section id="projects">
-				<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-					Projects
-				</h2>
-				<ul class="flex flex-col pl-10 group">
-					{projects.map((project) => (
-						<ProjectCard {...project} />
-					))}
-				</ul>
-			</section>
 			<section id="contacts">
 				<Footer />
 			</section>
