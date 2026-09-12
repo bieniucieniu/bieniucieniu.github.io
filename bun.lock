@@ -510,7 +510,7 @@
 
     "tinypool": ["tinypool@2.1.0", "", {}, "sha512-Pugqs6M0m7Lv1I7FtxN4aoyToKg1C4tu+/381vH35y8oENM/Ai7f7C4StcoK4/+BSw9ebcS8jRiVrORFKCALLw=="],
 
-    "tiptap-solid": ["tiptap-solid@github:bieniucieniu/tiptap-solid#eea448a", { "dependencies": { "fast-equals": "^5.3.3" }, "optionalDependencies": { "@tiptap/extension-bubble-menu": "^3.23.5", "@tiptap/extension-floating-menu": "^3.23.5" }, "peerDependencies": { "@tiptap/core": "^3.23.5", "@tiptap/pm": "^3.23.5", "solid-js": "^1.9.0" } }, "bieniucieniu-tiptap-solid-eea448a", "sha512-5YMhqnBseU0VZ/8+9nbCH/0/UxEnwf7vP4WVffPNKweBfJFINQo0PO4dyXsl3LMJJgmBu0qgxvNT3Ap2XOIKtQ=="],
+    "tiptap-solid": ["tiptap-solid@github:bieniucieniu/tiptap-solid#9e9310d", { "dependencies": { "fast-equals": "^5.3.3" }, "optionalDependencies": { "@tiptap/extension-bubble-menu": "^3.23.5", "@tiptap/extension-floating-menu": "^3.23.5" }, "peerDependencies": { "@tiptap/core": "^3.23.5", "@tiptap/pm": "^3.23.5", "solid-js": "^1.9.0" } }, "bieniucieniu-tiptap-solid-9e9310d", "sha512-txBBCOnMcAy+b3aGI0LJmYmgsKN/gm+2O2xqiBgoQAfo60Nn7JXo5zOhjbsQkCD9Umsb90IDIu1dFpdp9vA8+A=="],
 
     "totalist": ["totalist@3.0.1", "", {}, "sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ=="],
 
