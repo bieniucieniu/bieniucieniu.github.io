@@ -33,13 +33,7 @@ export default defineConfig({
 			"no-cond-assign": "off",
 		},
 	},
-	plugins: [
-		devtools(),
-		solidPlugin({
-			include: [/\.(tsx|jsx)$/, /node_modules\/tiptap-solid\/.*\.(tsx|ts)$/],
-		}),
-		tailwindcss(),
-	],
+	plugins: [devtools(), solidPlugin(), tailwindcss()],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),

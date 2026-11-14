@@ -2,7 +2,13 @@
 
 Personal portfolio site for [Mikołaj Bień](https://github.com/bieniucieniu).
 
-Built with SolidJS, Vite, Tailwind CSS, and `@solidjs/router`.
+Built with SolidJS, Vite+, Tailwind CSS and `@solidjs/router`. UI components, Tiptap, xyflow and Motion bindings come from the [solid-kit](https://github.com/bieniucieniu/solid-kit) shadcn registry (copied into `src/`, radius set to 0).
+
+Add or update a component:
+
+```bash
+bunx shadcn@latest add bieniucieniu/solid-kit/<item>
+```
 
 ## Development
 
@@ -13,7 +19,7 @@ bun install
 bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Build
 
