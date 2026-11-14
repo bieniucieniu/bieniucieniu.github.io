@@ -1,6 +1,5 @@
-import { For, Show } from "solid-js";
+import { For } from "solid-js";
 import { Page, Section } from "@/components/layout";
-import ProjectCard from "@/components/project-card";
 import { experiences } from "@/lib/data";
 
 export default function ExperiencePage() {
@@ -20,15 +19,6 @@ export default function ExperiencePage() {
 								<ul class="ml-4 flex list-disc flex-col gap-1 text-sm">
 									<For each={exp.highlights}>{(item) => <li>{item}</li>}</For>
 								</ul>
-								<Show when={exp.projects}>
-									{(list) => (
-										<div class="flex flex-col gap-3">
-											<For each={list()}>
-												{(project) => <ProjectCard {...project} />}
-											</For>
-										</div>
-									)}
-								</Show>
 							</li>
 						)}
 					</For>
