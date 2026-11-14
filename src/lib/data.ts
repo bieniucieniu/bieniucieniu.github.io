@@ -99,6 +99,7 @@ export const experiences: Experience[] = [
 		highlights: [
 			"Internal web apps in React and TypeScript.",
 			"Infrastructure on Kubernetes and Docker, with GitOps CI/CD (GitLab CI/CD, FluxCD).",
+			"Internal data collection forms in React Native and Jetpack Compose.",
 			"Java and Kotlin services: React frontends on their APIs, Docker builds and CI/CD pipelines for them, and some backend code.",
 		],
 	},
