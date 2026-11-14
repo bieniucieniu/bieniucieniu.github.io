@@ -97,9 +97,8 @@ export const experiences: Experience[] = [
 		company: "Correct K. Błaszczyk i Wspólnicy",
 		period: "04.2024 – present",
 		highlights: [
-			"Internal web apps in React and TypeScript.",
+			"Internal web and mobile apps in React, React Native and Jetpack Compose.",
 			"Infrastructure on Kubernetes and Docker, with GitOps CI/CD (GitLab CI/CD, FluxCD).",
-			"Internal data collection forms in React Native and Jetpack Compose.",
 			"Java and Kotlin services: React frontends on their APIs, Docker builds and CI/CD pipelines for them, and some backend code.",
 		],
 	},
