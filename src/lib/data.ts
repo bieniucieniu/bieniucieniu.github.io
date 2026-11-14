@@ -15,7 +15,6 @@ export type Experience = {
 	company: string;
 	period: string;
 	highlights: string[];
-	projects?: Project[];
 };
 
 export type SkillGroup = {
@@ -98,22 +97,9 @@ export const experiences: Experience[] = [
 		company: "Correct K. Błaszczyk i Wspólnicy",
 		period: "04.2024 – present",
 		highlights: [
-			"Internal data collection forms in React Native and Jetpack Compose.",
-			"GitOps CI/CD setup with GitLab CI/CD, Kubernetes and FluxCD.",
-		],
-		projects: [
-			{
-				title: "EUDR App",
-				description:
-					"Registers transports, orders and materials with supplier data for EUDR compliance. I wrote most of the frontend, added a Go service for printing transport documents, and helped with DevOps and API design. The purchasing team uses it daily.",
-				tags: ["React", "TypeScript", "TanStack Query", "TanStack Form", "Go"],
-			},
-			{
-				title: "TMS",
-				description:
-					"UI and UX fixes in Transport Management System modules, plus user docs.",
-				tags: ["React", "TypeScript"],
-			},
+			"Internal web apps in React and TypeScript.",
+			"Infrastructure on Kubernetes and Docker, with GitOps CI/CD (GitLab CI/CD, FluxCD).",
+			"Java and Kotlin services: React frontends on their APIs, Docker builds and CI/CD pipelines for them, and some backend code.",
 		],
 	},
 	{
@@ -142,7 +128,7 @@ export const skills: SkillGroup[] = [
 	},
 	{
 		name: "Backend",
-		skills: ["Kotlin", "Ktor", "Go", "Postgres"],
+		skills: ["Kotlin", "Java", "Ktor", "Go", "Postgres"],
 	},
 	{
 		name: "Infra",
