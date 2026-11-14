@@ -1,81 +1,57 @@
-import Layout, { Footer } from "~/components/layout";
-import { skillCategories } from "~/lib/data";
+import { A } from "@solidjs/router";
+import { For } from "solid-js";
+import { Page, Section } from "@/components/layout";
+import ProjectCard, { TagList } from "@/components/project-card";
+import { projects, skills } from "@/lib/data";
 
 export default function Home() {
 	return (
-		<Layout>
-			<section
-				id="about"
-				class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-			>
-				<About />
-			</section>
+		<Page>
+			<Section title="About" id="about">
+				<div class="flex flex-col gap-3 leading-relaxed">
+					<p>
+						I build web apps, mostly with React, TypeScript and the TanStack
+						libraries. At work that means internal tools for transport and
+						logistics, plus the GitLab CI/CD and Kubernetes setup they run on.
+					</p>
+					<p>
+						In my spare time I write SolidJS libraries (
+						<A href="/libs" class="text-primary underline underline-offset-4">
+							solid-kit
+						</A>
+						), small Kotlin and Zig projects, and run a home k3s cluster.
+					</p>
+				</div>
+			</Section>
 
-			<section
-				id="skills"
-				class="flex gap-y-3 flex-col leading-relaxed text-slate-300 font-normal opacity-80"
-			>
-				<Skills />
-			</section>
+			<Section title="Skills" id="skills">
+				<dl class="grid gap-3 text-sm sm:grid-cols-[8rem_1fr]">
+					<For each={skills}>
+						{(group) => (
+							<>
+								<dt class="text-muted-foreground">{group.name}</dt>
+								<dd>
+									<TagList tags={group.skills} />
+								</dd>
+							</>
+						)}
+					</For>
+				</dl>
+			</Section>
 
-			<section id="contacts">
-				<Footer />
-			</section>
-		</Layout>
-	);
-}
-
-function About() {
-	return (
-		<>
-			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-				About
-			</h2>
-			<p>
-				Results-driven Web Developer with over 3 years of experience
-				specializing in scalable{" "}
-				<span class="font-bold text-slate-100">React</span> and{" "}
-				<span class="font-bold text-slate-100">TypeScript</span> applications.
-				Expert in the{" "}
-				<span class="font-bold text-slate-100">TanStack ecosystem</span> (Query,
-				Form, Table, Router) for efficient data management and UI/UX
-				optimization.
-			</p>
-			<p>
-				Advanced DevOps expertise in building{" "}
-				<span class="font-bold text-slate-100">GitLab CI/CD</span> pipelines and
-				managing <span class="font-bold text-slate-100">Kubernetes</span>{" "}
-				clusters via GitOps (
-				<span class="font-bold text-slate-100">FluxCD</span>), delivering
-				end-to-end solutions for complex transport and internal logistics tools.
-				Experienced in cross-platform development with{" "}
-				<span class="font-bold text-slate-100">React Native</span> and{" "}
-				<span class="font-bold text-slate-100">Jetpack Compose</span>.
-			</p>
-		</>
-	);
-}
-
-function Skills() {
-	return (
-		<>
-			<h2 class="text-xl font-black text-teal-500/80 inline lg:hidden">
-				Skills
-			</h2>
-			<ul class="flex flex-col gap-y-4 pl-10">
-				{skillCategories.map((cat) => (
-					<li class="flex flex-col gap-y-2">
-						<h3 class="font-bold text-slate-100 text-sm">{cat.category}</h3>
-						<ul class="flex flex-wrap gap-2">
-							{cat.skills.map((skill) => (
-								<li class="rounded-full font-bold backdrop-blur-md bg-slate-500/10 text-xs px-2 py-1">
-									{skill}
-								</li>
-							))}
-						</ul>
-					</li>
-				))}
-			</ul>
-		</>
+			<Section title="Selected projects" id="projects">
+				<div class="flex flex-col gap-4">
+					<For each={projects.filter((p) => p.featured)}>
+						{(project) => <ProjectCard {...project} />}
+					</For>
+				</div>
+				<A
+					href="/projects"
+					class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+				>
+					All projects →
+				</A>
+			</Section>
+		</Page>
 	);
 }

@@ -1,20 +1,20 @@
 import { Route, Router } from "@solidjs/router";
-import { Suspense } from "solid-js";
-import Spotlight from "./components/spotlight";
-import Home from "./routes";
-import NotFound from "./routes/[...404]";
-import Experience from "./routes/experience";
-import Libs from "./routes/libs";
-import Projects from "./routes/projects";
+import { lazy, Suspense } from "solid-js";
+import Layout from "@/components/layout";
+import Home from "@/routes";
+import NotFound from "@/routes/[...404]";
+import Experience from "@/routes/experience";
+import Projects from "@/routes/projects";
+
+const Libs = lazy(() => import("@/routes/libs"));
 
 export default function App() {
 	return (
 		<Router
 			root={(props) => (
-				<>
-					<Spotlight />
+				<Layout>
 					<Suspense>{props.children}</Suspense>
-				</>
+				</Layout>
 			)}
 		>
 			<Route path="/" component={Home} />

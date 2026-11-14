@@ -1,199 +1,160 @@
-import type { JSX } from "solid-js";
+export type Status = "live" | "wip" | "done";
+
+export type Project = {
+	title: string;
+	description: string;
+	tags: string[];
+	status?: Status;
+	link?: string;
+	repo?: string;
+	featured?: boolean;
+};
 
 export type Experience = {
 	role: string;
 	company: string;
 	period: string;
 	highlights: string[];
-	projectCategories?: ProjectCategory[];
+	projects?: Project[];
 };
 
-export type SkillCategoryName =
-	| "Web & Mobile"
-	| "Backend & Libs"
-	| "DevOps & Infrastructure";
-
-export type ProjectCategory = {
-	category: SkillCategoryName;
-	projects: Project[];
+export type SkillGroup = {
+	name: string;
+	skills: string[];
 };
 
-export type Project = {
-	title: string;
-	content: JSX.Element;
-	tags: string[];
-	status?: (
-		| "finished"
-		| "suspended"
-		| "in progress"
-		| "not hosted"
-		| "in production"
-	)[];
-	link?: string;
-	repo?: string;
-};
+export type Contact = { label: string; href: string };
 
-const workProjectCategories: ProjectCategory[] = [
+const gh = (repo: string) => `https://github.com/bieniucieniu/${repo}`;
+
+export const projects: Project[] = [
 	{
-		category: "Web & Mobile",
-		projects: [
-			{
-				title: "EUDR App",
-				content:
-					"Application for registering transport, orders, and materials with supplier data aggregation for EUDR compliance. Authored most of the frontend using TanStack Form and Query for instant load times and real-time, error-aware validation. Scaled the system off an external development team and integrated a stable Go backend for transport validation document printing. Participated in DevOps setup and API design. Used daily by purchasing department teams as the primary source for transport and order information.",
-				tags: ["React", "TypeScript", "TanStack Query", "TanStack Form", "Go"],
-				status: ["in production"],
-			},
-			{
-				title: "TMS System",
-				content:
-					"Transport Management System modules enhanced for UI/UX and readability, with comprehensive documentation for user training and cross-team collaboration.",
-				tags: ["React", "TypeScript"],
-				status: ["in production"],
-			},
-		],
+		title: "solid-kit",
+		description:
+			"SolidJS ports of Tiptap, xyflow and Motion, plus shadcn-style UI and Material 3 registries. This site uses its components.",
+		tags: ["SolidJS", "TypeScript", "Tailwind CSS", "shadcn registry"],
+		status: "wip",
+		link: "https://solid-kit.kurwidolek.com/",
+		repo: gh("solid-kit"),
+		featured: true,
+	},
+	{
+		title: "cookbook",
+		description:
+			"Recipe app. Kotlin/Native Ktor API on Postgres, Solid web app with TanStack Router and Query, WorkOS login. UI built on solid-kit.",
+		tags: ["Kotlin", "Ktor", "SolidJS", "TanStack", "Postgres"],
+		status: "wip",
+		link: "https://cookbook.kurwidolek.com/",
+		repo: gh("cookbook"),
+		featured: true,
+	},
+	{
+		title: "infra",
+		description:
+			"Flux GitOps repo for my Raspberry Pi k3s cluster. It runs cookbook, solid-kit and breakout.",
+		tags: ["Kubernetes", "k3s", "FluxCD", "Traefik"],
+		status: "live",
+		repo: gh("infra"),
+		featured: true,
+	},
+	{
+		title: "zula",
+		description:
+			"Starter kit for small-company apps: sign-in, a public company profile, and web and mobile shells on one API.",
+		tags: ["Kotlin", "Ktor", "React", "Expo"],
+		status: "wip",
+		repo: gh("zula"),
+	},
+	{
+		title: "Bracia Bień",
+		description:
+			"Website for my father's shop, with an admin page for managing the site's images. Images are uploaded with UploadThing, data is in Turso.",
+		tags: ["Next.js", "Drizzle", "Turso", "shadcn/ui", "Framer Motion"],
+		status: "live",
+		link: "https://braciabien.pl/",
+		repo: gh("bracia-bien"),
+	},
+	{
+		title: "breakout",
+		description:
+			"Breakout game in React with react-three-fiber, p2 physics and zustand for state.",
+		tags: ["React", "react-three-fiber", "p2", "vanilla-extract"],
+		status: "done",
+		link: "https://breakout.kurwidolek.com/",
+		repo: gh("breakout"),
+	},
+	{
+		title: "ball",
+		description: "Ball and object physics simulation.",
+		tags: ["Zig", "raylib"],
+		status: "wip",
+		repo: gh("ball"),
 	},
 ];
 
 export const experiences: Experience[] = [
 	{
 		role: "Software Developer",
-		company: "Correct K. Błaszczyk i Wspólnicy Spółka",
-		period: "04.2024 – Present",
+		company: "Correct K. Błaszczyk i Wspólnicy",
+		period: "04.2024 – present",
 		highlights: [
-			"Developed internal data collection forms with React Native and Jetpack Compose.",
-			"Led GitOps CI/CD setup (GitLab CI/CD, Kubernetes, FluxCD), accelerating deployments 2–3× for internal testing.",
+			"Internal data collection forms in React Native and Jetpack Compose.",
+			"GitOps CI/CD setup with GitLab CI/CD, Kubernetes and FluxCD.",
 		],
-		projectCategories: workProjectCategories,
+		projects: [
+			{
+				title: "EUDR App",
+				description:
+					"Registers transports, orders and materials with supplier data for EUDR compliance. I wrote most of the frontend, added a Go service for printing transport documents, and helped with DevOps and API design. The purchasing team uses it daily.",
+				tags: ["React", "TypeScript", "TanStack Query", "TanStack Form", "Go"],
+			},
+			{
+				title: "TMS",
+				description:
+					"UI and UX fixes in Transport Management System modules, plus user docs.",
+				tags: ["React", "TypeScript"],
+			},
+		],
 	},
 	{
-		role: "Frontend Developer (Freelance)",
-		company: "Self-Employed",
+		role: "Frontend Developer (freelance)",
+		company: "Self-employed",
 		period: "2022 – 2024",
-		highlights: [
-			"Built responsive Next.js/TypeScript web applications for local business clients.",
-			"Achieved Lighthouse performance scores of 95+ by optimizing Core Web Vitals.",
-		],
+		highlights: ["Next.js and TypeScript websites for local businesses."],
 	},
 ];
 
-export type SkillCategory = {
-	category: SkillCategoryName;
-	skills: string[];
-};
-
-export const skillCategories: SkillCategory[] = [
+export const skills: SkillGroup[] = [
 	{
-		category: "Web & Mobile",
+		name: "Frontend",
 		skills: [
+			"TypeScript",
 			"React",
 			"Next.js",
-			"TanStack Start",
-			"Solid.js",
-			"TypeScript",
+			"SolidJS",
+			"TanStack",
 			"Tailwind CSS",
-			"TanStack Router",
-			"Jetpack Compose",
-			"React Native",
 		],
 	},
 	{
-		category: "Backend & Libs",
-		skills: [
-			"Go",
-			"Kotlin",
-			"TanStack Query",
-			"TanStack Form",
-			"TanStack Table",
-		],
+		name: "Mobile",
+		skills: ["React Native", "Jetpack Compose"],
 	},
 	{
-		category: "DevOps & Infrastructure",
-		skills: [
-			"Git",
-			"GitLab CI/CD",
-			"Docker",
-			"Kubernetes",
-			"FluxCD",
-			"OpenAPI/Swagger UI",
-			"Linux",
-		],
+		name: "Backend",
+		skills: ["Kotlin", "Ktor", "Go", "Postgres"],
+	},
+	{
+		name: "Infra",
+		skills: ["Docker", "Kubernetes", "FluxCD", "GitLab CI/CD", "Linux", "Nix"],
 	},
 ];
-
-export const projects: Project[] = [
-	{
-		title: "kong",
-		content:
-			"ai agent with a chatbot and integration with git hosting (github, gitea) and posibly with smart home automation",
-		tags: ["kotlin", "koog", "shadcn-ui", "tanstack"],
-		status: ["in progress", "not hosted"],
-		repo: "https://github.com/bieniucieniu/kong",
-	},
-	{
-		title: "Bracia Bien",
-		content: `
-          This is a web page for my father's shop. It features fully dynamic
-          images stored on a bucket and managed through a Postgres database on
-          the admin page.
-`,
-		tags: ["next.js 13", "shadcn", "framer motion"],
-		status: ["in progress"],
-		link: "https://braciabien.pl/",
-		repo: "https://github.com/bieniucieniu/bracia-bien",
-	},
-	{
-		title: "Breakout",
-		content:
-			"2D/3D game leveraging vanilla React and the react-three-fiber library for 3D rendering with JSX templating and React. Implemented 2D physics with react and utilities from three-fiber and state management with zustand.",
-		tags: ["three.js", "vanilla-extract-css"],
-		status: ["finished"],
-		link: "https://breakout.bieniucieniu.pl/",
-		repo: "https://github.com/bieniucieniu/breakout",
-	},
-	{
-		title: "ball",
-		content: "zig + raylib balls physics simulation",
-		status: ["in progress", "not hosted"],
-		tags: ["zig", "raylib"],
-		repo: "https://github.com/bieniucieniu/bracia-bien",
-	},
-	{
-		title: "sorting",
-		content: `This is my first real project with vanilla JS/TS, which utilizes
-                HTML canvas to visualize four sorting algorithms.`,
-		tags: ["vanilla js"],
-		status: ["finished"],
-		link: "https://sorting.bieniucieniu.pl/",
-		repo: "https://github.com/bieniucieniu/sorting",
-	},
-	{
-		title: "no esta bien",
-		content:
-			"puzzle game based on notpron, writen in go, gofiber, and vanilla html and css. \n Currently only one level and basic auth on jwt.",
-		tags: ["go", "go fiber", "html", "css"],
-		status: ["suspended", "not hosted"],
-		link: "https://github.com/bieniucieniu/noestabien",
-		repo: "https://github.com/bieniucieniu/noestabien",
-	},
-];
-
-export type Contact = { label: string; href: string; hrefLabel: string };
 
 export const contacts: Contact[] = [
+	{ label: "GitHub", href: "https://github.com/bieniucieniu" },
 	{
-		label: "github",
-		href: "https://github.com/bieniucieniu",
-		hrefLabel: "github.com/bieniucieniu",
-	},
-	{
-		label: "bienmikolaj@gmail.com",
-		href: "mailto:bienmikolaj@gmail.com",
-		hrefLabel: "bienmikolaj@gmail.com",
-	},
-	{
-		label: "linkedin",
+		label: "LinkedIn",
 		href: "https://www.linkedin.com/in/mikołaj-bień-6090b2237",
-		hrefLabel: "www.linkedin.com/in/mikołaj-bień-6090b2237",
 	},
+	{ label: "bienmikolaj@gmail.com", href: "mailto:bienmikolaj@gmail.com" },
 ];

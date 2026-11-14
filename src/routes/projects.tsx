@@ -1,22 +1,28 @@
-import Layout, { Footer } from "~/components/layout";
-import NavPageHeader from "~/components/nav-page-header";
-import ProjectCard from "~/components/project-card";
-import { projects } from "~/lib/data";
+import { For } from "solid-js";
+import { Page, Section } from "@/components/layout";
+import ProjectCard from "@/components/project-card";
+import { projects } from "@/lib/data";
 
 export default function ProjectsPage() {
 	return (
-		<Layout>
-			<section class="flex flex-col gap-y-4 leading-relaxed text-slate-300 font-normal opacity-80">
-				<NavPageHeader />
-				<ul class="flex flex-col pl-10 group">
-					{projects.map((project) => (
-						<ProjectCard {...project} />
-					))}
-				</ul>
-			</section>
-			<section id="contacts">
-				<Footer />
-			</section>
-		</Layout>
+		<Page>
+			<Section title="Projects">
+				<p class="text-sm text-muted-foreground">
+					Personal and side projects. More on{" "}
+					<a
+						href="https://github.com/bieniucieniu"
+						target="_blank"
+						rel="noreferrer"
+						class="text-primary underline underline-offset-4"
+					>
+						GitHub
+					</a>
+					.
+				</p>
+				<div class="flex flex-col gap-4">
+					<For each={projects}>{(project) => <ProjectCard {...project} />}</For>
+				</div>
+			</Section>
+		</Page>
 	);
 }

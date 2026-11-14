@@ -1,54 +1,162 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 html {
 	scroll-behavior: smooth;
 }
 
-.ProseMirror {
-	@apply min-h-[200px] outline-none;
+body {
+	font-family: "Lato", ui-sans-serif, system-ui, sans-serif;
 }
 
-.ProseMirror p.is-editor-empty:first-child::before {
-	@apply pointer-events-none float-left h-0 text-slate-500;
-	content: attr(data-placeholder);
-}
-
-.tiptap-content .ProseMirror h1 {
-	@apply mb-4 text-3xl font-extrabold text-slate-100;
-}
-
-.tiptap-content .ProseMirror h2 {
-	@apply mb-3 mt-4 text-2xl font-bold text-slate-100;
-}
-
-.tiptap-content .ProseMirror h3 {
-	@apply mb-2 mt-3 text-xl font-semibold text-slate-100;
-}
-
-.tiptap-content .ProseMirror p {
-	@apply mb-3 leading-relaxed text-slate-300;
-}
-
-.tiptap-content .ProseMirror ul {
-	@apply mb-3 ml-6 list-disc text-slate-300;
-}
-
-.tiptap-content .ProseMirror ol {
-	@apply mb-3 ml-6 list-decimal text-slate-300;
-}
-
-.tiptap-content .ProseMirror blockquote {
-	@apply my-4 border-l-4 border-teal-500/40 pl-4 italic text-slate-400;
-}
-
-.tiptap-content .ProseMirror code {
-	@apply rounded bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-teal-200;
-}
-
-.tiptap-content .ProseMirror pre {
-	@apply my-4 overflow-x-auto rounded-lg bg-slate-950 p-4 font-mono text-sm text-slate-200;
+/* Tiptap demo */
+.tiptap-editor {
+	@apply overflow-hidden border border-border bg-card;
 }
 
 .tiptap-editor:focus-within {
-	@apply ring-2 ring-teal-500/30 ring-offset-2 ring-offset-slate-900;
+	@apply border-ring;
+}
+
+.tiptap-editor .ProseMirror {
+	@apply min-h-40 px-4 py-3 text-sm outline-none;
+}
+
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+	@apply pointer-events-none float-left h-0 text-muted-foreground;
+	content: attr(data-placeholder);
+}
+
+.tiptap-editor .ProseMirror h1 {
+	@apply mb-3 text-2xl font-bold;
+}
+
+.tiptap-editor .ProseMirror h2 {
+	@apply mt-3 mb-2 text-xl font-bold;
+}
+
+.tiptap-editor .ProseMirror h3 {
+	@apply mt-3 mb-2 text-lg font-semibold;
+}
+
+.tiptap-editor .ProseMirror p {
+	@apply mb-2 leading-relaxed;
+}
+
+.tiptap-editor .ProseMirror ul {
+	@apply mb-2 ml-5 list-disc;
+}
+
+.tiptap-editor .ProseMirror ol {
+	@apply mb-2 ml-5 list-decimal;
+}
+
+.tiptap-editor .ProseMirror blockquote {
+	@apply my-3 border-l-2 border-primary pl-3 text-muted-foreground;
+}
+
+.tiptap-editor .ProseMirror code {
+	@apply bg-muted px-1 py-0.5 font-mono text-xs;
+}
+
+.tiptap-editor .ProseMirror pre {
+	@apply my-3 overflow-x-auto bg-muted p-3 font-mono text-xs;
+}
+
+/* xyflow: follow theme tokens */
+.xy-flow {
+	--xy-node-color: var(--card-foreground);
+	--xy-node-border: 1px solid var(--border);
+	--xy-node-background-color: var(--card);
+	--xy-node-boxshadow-selected: 0 0 0 1px var(--ring);
+	--xy-handle-background-color: var(--muted-foreground);
+	--xy-handle-border-color: var(--card);
+	--xy-edge-stroke: var(--muted-foreground);
+	--xy-controls-button-background-color: var(--card);
+	--xy-controls-button-background-color-hover: var(--muted);
+	--xy-controls-button-color: var(--foreground);
+	--xy-controls-button-border-color: var(--border);
+	--xy-background-pattern-dots-color: var(--accent);
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+	--radius: 0;
+	--background: oklch(1 0 0);
+	--foreground: oklch(0.145 0 0);
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.145 0 0);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.145 0 0);
+	--primary: oklch(0.205 0 0);
+	--primary-foreground: oklch(0.985 0 0);
+	--secondary: oklch(0.97 0 0);
+	--secondary-foreground: oklch(0.205 0 0);
+	--muted: oklch(0.97 0 0);
+	--muted-foreground: oklch(0.556 0 0);
+	--accent: oklch(0.97 0 0);
+	--accent-foreground: oklch(0.205 0 0);
+	--destructive: oklch(0.577 0.245 27.325);
+	--border: oklch(0.922 0 0);
+	--input: oklch(0.922 0 0);
+	--ring: oklch(0.708 0 0);
+}
+
+.dark {
+	--background: oklch(0.208 0.042 265.755);
+	--foreground: oklch(0.929 0.013 255.508);
+	--card: oklch(0.239 0.042 265.755);
+	--card-foreground: oklch(0.929 0.013 255.508);
+	--popover: oklch(0.239 0.042 265.755);
+	--popover-foreground: oklch(0.929 0.013 255.508);
+	--primary: oklch(0.777 0.152 181.912);
+	--primary-foreground: oklch(0.208 0.042 265.755);
+	--secondary: oklch(0.279 0.041 260.031);
+	--secondary-foreground: oklch(0.929 0.013 255.508);
+	--muted: oklch(0.279 0.041 260.031);
+	--muted-foreground: oklch(0.704 0.04 256.788);
+	--accent: oklch(0.372 0.044 257.287);
+	--accent-foreground: oklch(0.984 0.003 247.858);
+	--destructive: oklch(0.704 0.191 22.216);
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.704 0.14 182.503);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground antialiased;
+	}
 }
