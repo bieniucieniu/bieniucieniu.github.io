@@ -77,6 +77,56 @@ pub fn rayGround(pos: Vec3, dir: Vec3) ?Vec3 {
     return .{ .x = pos.x + dir.x * t, .y = 0, .z = pos.z + dir.z * t };
 }
 
+/// Spawn and death animation curves. Times are seconds since the animation
+/// started; negative means it hasn't started yet (a per-chick delay).
+pub const anim = struct {
+    /// Egg grows in, then wobbles until it cracks at `egg_end`.
+    pub const egg_in: f32 = 0.12;
+    pub const egg_end: f32 = 0.6;
+    /// The chick pops out of the egg between `egg_end` and `hatch_end`.
+    pub const hatch_end: f32 = 0.85;
+    /// A dying chick hops, spins and shrinks away over `death_time`.
+    pub const death_time: f32 = 0.55;
+
+    /// Overshoots past 1 and settles back: a "pop".
+    pub fn easeOutBack(x: f32) f32 {
+        const k: f32 = 1.70158;
+        const u = std.math.clamp(x, 0, 1) - 1;
+        return 1 + (k + 1) * u * u * u + k * u * u;
+    }
+
+    /// Egg size (0 = not shown).
+    pub fn eggScale(t: f32) f32 {
+        if (t < 0 or t >= egg_end) return 0;
+        return easeOutBack(t / egg_in);
+    }
+
+    /// Egg wobble angle, growing until it cracks.
+    pub fn eggWobble(t: f32) f32 {
+        if (t < 0 or t >= egg_end) return 0;
+        return @sin(t * 28) * 0.4 * (t / egg_end);
+    }
+
+    /// Chick size while hatching (0 = still in the egg, 1 = hatched).
+    pub fn hatchScale(t: f32) f32 {
+        if (t < egg_end) return 0;
+        return easeOutBack((t - egg_end) / (hatch_end - egg_end));
+    }
+
+    pub const Death = struct { scale: f32, lift: f32, spin: f32 };
+
+    /// Look of a dying chick: a short hop, then spinning while it shrinks.
+    pub fn death(t: f32) Death {
+        if (t <= 0) return .{ .scale = 1, .lift = 0, .spin = 0 };
+        const x = std.math.clamp(t / death_time, 0, 1);
+        return .{
+            .scale = 1 - x * x,
+            .lift = 0.35 * @sin(std.math.pi * @min(1, t / 0.3)),
+            .spin = 30 * t * t,
+        };
+    }
+};
+
 test "FixedStep runs whole steps and keeps remainder" {
     var fs: FixedStep = .{ .dt = 0.01 };
     try std.testing.expectEqual(@as(u32, 0), fs.steps(0.005));
@@ -128,4 +178,22 @@ test "rayGround" {
     try std.testing.expectApproxEqAbs(@as(f32, 2), hit.z, 1e-6);
     try std.testing.expect(rayGround(.{ .x = 0, .y = 5, .z = 0 }, .{ .x = 1, .y = 0, .z = 0 }) == null);
     try std.testing.expect(rayGround(.{ .x = 0, .y = 5, .z = 0 }, .{ .x = 0, .y = 1, .z = 0 }) == null);
+}
+
+test "anim: egg pops in, chick pops out after it" {
+    const a = anim;
+    try std.testing.expectEqual(@as(f32, 0), a.eggScale(-0.1));
+    try std.testing.expectApproxEqAbs(@as(f32, 1), a.eggScale(a.egg_in), 1e-5);
+    try std.testing.expectEqual(@as(f32, 0), a.eggScale(a.egg_end));
+    try std.testing.expectEqual(@as(f32, 0), a.hatchScale(a.egg_end - 0.01));
+    try std.testing.expect(a.hatchScale(a.egg_end + 0.15) > 1); // overshoot
+    try std.testing.expectApproxEqAbs(@as(f32, 1), a.hatchScale(a.hatch_end), 1e-5);
+    try std.testing.expectApproxEqAbs(@as(f32, 1), a.hatchScale(10), 1e-5);
+}
+
+test "anim: death shrinks to nothing" {
+    const a = anim;
+    try std.testing.expectEqual(@as(f32, 1), a.death(-1).scale);
+    try std.testing.expect(a.death(0.15).lift > 0.2);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), a.death(a.death_time).scale, 1e-6);
 }

@@ -67,7 +67,7 @@ pub fn build(b: *std.Build) void {
 
     const out = emscripten.link(b, tc, .{
         .name = "chicks",
-        .exports = &.{"chicks_click"},
+        .exports = &.{ "chicks_click", "chicks_kill", "chicks_respawn" },
         .optimize = optimize,
         .pre_js = b.path("src/web/pre.js"),
         .libs = &.{ game, raylib.build(b, target, optimize, sysroot), box2d.build(b, target, optimize, sysroot) },

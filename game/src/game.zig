@@ -7,6 +7,14 @@
 //! Physics is a flat Box2D world with zero gravity. The floor (x, y) is drawn
 //! on the 3D ground plane (x, z) by engine.LowResView. The pen is exactly the
 //! ground the view shows, so the window edges are its walls.
+//!
+//! The canvas is transparent: the ground itself is the page's CSS background
+//! (src/index.css), so it shows before the game has loaded.
+//!
+//! `kill` removes every chick and `respawn` brings a fresh flock (the site's
+//! corner buttons, src/components/chicks-controls.tsx). Chicks hatch from an
+//! egg when they appear and die in a puff of feathers when removed (curves in
+//! math.anim).
 
 const std = @import("std");
 const engine = @import("engine.zig");
@@ -14,10 +22,13 @@ const rl = engine.rl;
 const b2 = engine.b2;
 const c = b2.c;
 const to3 = engine.to3;
+const anim = engine.math.anim;
 
 const min_chicks = 6;
 const max_chicks = 48;
 const max_seeds = 64;
+const max_corpses = max_chicks * 2;
+const max_particles = 256;
 
 const wall_t: f32 = 0.25; // wall half thickness
 
@@ -44,6 +55,51 @@ const Chick = struct {
     walk_phase: f32 = 0,
     wobble_phase: f32,
     tint: u8,
+    /// Seconds since the hatch animation started; negative while waiting.
+    hatch_t: f32,
+
+    fn hatched(self: Chick) bool {
+        return self.hatch_t >= anim.egg_end;
+    }
+
+    fn look(self: Chick) Look {
+        return .{
+            .pos = b2.pose(self.body).pos,
+            .heading = self.heading,
+            .tint = self.tint,
+            .walk_phase = self.walk_phase,
+            .eat_timer = self.eat_timer,
+        };
+    }
+};
+
+/// What drawing a chick needs; a dying chick keeps it after its body is gone.
+const Look = struct {
+    pos: b2.Vec2,
+    heading: f32,
+    tint: u8,
+    walk_phase: f32 = 0,
+    eat_timer: f32 = 0,
+};
+
+/// A removed chick playing its death animation (no physics body).
+const Corpse = struct {
+    look: Look,
+    /// Seconds since dying started; negative while waiting.
+    t: f32,
+};
+
+/// Feathers and egg shell pieces: drawn boxes with simple ballistics.
+const Particle = struct {
+    pos: rl.Vector3,
+    vel: rl.Vector3,
+    size: f32,
+    yaw: f32,
+    spin: f32,
+    gravity: f32,
+    life: f32,
+    max_life: f32,
+    col: rl.Color,
 };
 
 const Seed = struct {
@@ -70,14 +126,13 @@ const Tag = struct {
 
 // Greys only (r = g = b), kept dark so page text on top stays readable.
 // engine.drawBox3 shades faces between 0.7× and ~1.05× of these.
-const tile_a = rl.grey(8);
-const tile_b = rl.grey(14);
 const chick_grey: f32 = 118;
 const head_lift = 10;
 const beak = rl.grey(70);
 const comb = rl.grey(140);
 const eye = rl.black;
 const seed_col = rl.grey(150);
+const egg_col = rl.grey(165);
 const shadow = rl.rgba(0, 0, 0, 60);
 
 pub const Game = struct {
@@ -89,7 +144,13 @@ pub const Game = struct {
     walls: [4]b2.BodyId = undefined,
     chicks: [max_chicks]Chick = undefined,
     n_chicks: usize = 0,
+    /// False after `kill`: the pen stays empty, also across resizes.
+    populated: bool = true,
     seeds: [max_seeds]Seed = @splat(.{}),
+    corpses: [max_corpses]Corpse = undefined,
+    n_corpses: usize = 0,
+    particles: [max_particles]Particle = undefined,
+    n_particles: usize = 0,
     time: f32 = 0,
     rng: std.Random.DefaultPrng,
 
@@ -102,7 +163,7 @@ pub const Game = struct {
             .rng = .init(0xc41c),
         };
         self.buildWalls();
-        self.setChickCount();
+        self.setChickCount(.{ 0, 0.8 });
     }
 
     fn rand(self: *Game) std.Random {
@@ -149,20 +210,50 @@ pub const Game = struct {
         for (self.seeds) |s| {
             if (s.alive) b2.moveTo(s.body, self.clampToPen(b2.pose(s.body).pos, seed_r));
         }
-        self.setChickCount();
+        self.setChickCount(.{ 0, 0.3 });
     }
 
-    fn setChickCount(self: *Game) void {
-        const want = engine.math.chickCount(.{ .x = self.pen.x, .y = self.pen.y }, min_chicks, max_chicks);
-        while (self.n_chicks > want) {
-            self.n_chicks -= 1;
-            c.b2DestroyBody(self.chicks[self.n_chicks].body);
+    /// Matches the flock to the pen area (none when not `populated`). New
+    /// chicks start hatching after a random delay in `delay` (seconds); removed
+    /// ones die.
+    fn setChickCount(self: *Game, delay: [2]f32) void {
+        const want = if (self.populated)
+            engine.math.chickCount(.{ .x = self.pen.x, .y = self.pen.y }, min_chicks, max_chicks)
+        else
+            0;
+        while (self.n_chicks > want) self.removeLastChick();
+        while (self.n_chicks < want) self.addChick(self.range(delay[0], delay[1]));
+    }
+
+    /// Removes the last chick's body; it keeps playing its death as a corpse.
+    fn removeLastChick(self: *Game) void {
+        self.n_chicks -= 1;
+        const ch = self.chicks[self.n_chicks];
+        // One still in its egg just vanishes.
+        if (ch.hatched() and self.n_corpses < max_corpses) {
+            self.corpses[self.n_corpses] = .{ .look = ch.look(), .t = -self.range(0, 0.25) };
+            self.n_corpses += 1;
         }
-        while (self.n_chicks < want) self.addChick();
+        c.b2DestroyBody(ch.body);
     }
 
-    /// Adds a chick at a random spot that doesn't overlap the others.
-    fn addChick(self: *Game) void {
+    /// Removes every chick. Seeds stay, and clicks still drop more.
+    pub fn kill(self: *Game) void {
+        self.populated = false;
+        self.setChickCount(.{ 0, 0 });
+    }
+
+    /// Replaces the flock with a fresh one at new random spots; the new eggs
+    /// appear once the old flock has started dying.
+    pub fn respawn(self: *Game) void {
+        self.kill();
+        self.populated = true;
+        self.setChickCount(.{ 0.35, 0.85 });
+    }
+
+    /// Adds a chick at a random spot that doesn't overlap the others. It hatches
+    /// after `delay` seconds.
+    fn addChick(self: *Game, delay: f32) void {
         const i = self.n_chicks;
         const m = chick_r * 2;
         var pos = b2.vec2(0, 0);
@@ -189,6 +280,7 @@ pub const Game = struct {
             .wander_timer = self.range(0.2, 2),
             .wobble_phase = self.range(0, std.math.tau),
             .tint = @intFromFloat(chick_grey * self.range(0.85, 1.0)),
+            .hatch_t = -delay,
         };
         self.n_chicks += 1;
     }
@@ -243,7 +335,9 @@ pub const Game = struct {
             const v = c.b2Body_GetLinearVelocity(ch.body);
             var desired = b2.vec2(0, 0);
 
-            if (ch.eat_timer > 0) {
+            if (!ch.hatched()) {
+                // Still in the egg: stay put.
+            } else if (ch.eat_timer > 0) {
                 ch.eat_timer -= dt;
             } else if (self.nearestSeed(p)) |target| {
                 const dx = target.x - p.x;
@@ -307,6 +401,7 @@ pub const Game = struct {
             const b = c.b2Shape_GetBody(e.shapeIdB);
             const ci = Tag.of(a, .chick) orelse Tag.of(b, .chick) orelse continue;
             const si = Tag.of(a, .seed) orelse Tag.of(b, .seed) orelse continue;
+            if (!self.chicks[ci].hatched()) continue; // eggs don't eat
             if (dead[si]) continue; // someone else got it this step
             dead[si] = true;
             self.chicks[ci].eat_timer = eat_time;
@@ -327,6 +422,95 @@ pub const Game = struct {
             self.steer(self.step.dt);
             self.world.step(self.step.dt);
             self.eat();
+            self.animate(self.step.dt);
+        }
+    }
+
+    // ---- animation ----------------------------------------------------------
+
+    /// Advances hatching, dying and particles; emits shells as an egg cracks
+    /// and feathers as a chick starts dying.
+    fn animate(self: *Game, dt: f32) void {
+        for (self.chicks[0..self.n_chicks]) |*ch| {
+            const before = ch.hatch_t;
+            ch.hatch_t += dt;
+            if (before < anim.egg_end and ch.hatch_t >= anim.egg_end) self.crackEgg(b2.pose(ch.body).pos);
+        }
+
+        var i: usize = 0;
+        while (i < self.n_corpses) {
+            const cp = &self.corpses[i];
+            const before = cp.t;
+            cp.t += dt;
+            if (before <= 0 and cp.t > 0) self.puff(cp.look);
+            if (cp.t >= anim.death_time) {
+                self.n_corpses -= 1;
+                self.corpses[i] = self.corpses[self.n_corpses];
+            } else i += 1;
+        }
+
+        i = 0;
+        while (i < self.n_particles) {
+            const pt = &self.particles[i];
+            pt.life -= dt;
+            if (pt.life <= 0) {
+                self.n_particles -= 1;
+                self.particles[i] = self.particles[self.n_particles];
+                continue;
+            }
+            pt.vel.y -= pt.gravity * dt;
+            pt.pos = .{ .x = pt.pos.x + pt.vel.x * dt, .y = pt.pos.y + pt.vel.y * dt, .z = pt.pos.z + pt.vel.z * dt };
+            if (pt.pos.y < pt.size / 2) {
+                // Land and slide to a stop.
+                pt.pos.y = pt.size / 2;
+                pt.vel = .{ .x = pt.vel.x * 0.5, .y = 0, .z = pt.vel.z * 0.5 };
+                pt.spin *= 0.5;
+            }
+            pt.yaw += pt.spin * dt;
+            i += 1;
+        }
+    }
+
+    fn emit(self: *Game, p: Particle) void {
+        if (self.n_particles == max_particles) return;
+        self.particles[self.n_particles] = p;
+        self.n_particles += 1;
+    }
+
+    /// Two shell halves fly apart as the chick pops out.
+    fn crackEgg(self: *Game, pos: b2.Vec2) void {
+        const d = self.randomDir();
+        for ([_]f32{ 1, -1 }) |side| {
+            self.emit(.{
+                .pos = to3(pos, 0.3),
+                .vel = .{ .x = d.x * side * 1.2, .y = 2.2, .z = d.y * side * 1.2 },
+                .size = 0.16,
+                .yaw = 0,
+                .spin = side * 9,
+                .gravity = 9.8,
+                .life = 0.7,
+                .max_life = 0.7,
+                .col = egg_col,
+            });
+        }
+    }
+
+    /// A burst of feathers in the chick's colour.
+    fn puff(self: *Game, look: Look) void {
+        for (0..8) |_| {
+            const d = self.randomDir();
+            const speed = self.range(0.6, 1.8);
+            self.emit(.{
+                .pos = to3(look.pos, self.range(0.2, 0.5)),
+                .vel = .{ .x = d.x * speed, .y = self.range(1.2, 2.6), .z = d.y * speed },
+                .size = self.range(0.05, 0.09),
+                .yaw = self.range(0, std.math.tau),
+                .spin = self.range(-12, 12),
+                .gravity = 3.5,
+                .life = self.range(0.6, 1.0),
+                .max_life = 1.0,
+                .col = rl.grey(look.tint + head_lift),
+            });
         }
     }
 
@@ -336,59 +520,74 @@ pub const Game = struct {
         engine.drawBox3(center, .{ .x = l, .y = h, .z = w }, yaw, col);
     }
 
-    /// Checker of 1 m tiles turned 45°, so they read as isometric diamonds,
-    /// covering the pen.
-    fn drawGround(self: *const Game) void {
-        const s = std.math.sqrt1_2;
-        const reach = (self.pen.x + self.pen.y) * s + 1;
-        const n: i32 = @intFromFloat(@ceil(reach));
-        var j: i32 = -n;
-        while (j <= n) : (j += 1) {
-            var i: i32 = -n;
-            while (i <= n) : (i += 1) {
-                const u: f32 = @floatFromInt(i);
-                const v: f32 = @floatFromInt(j);
-                const p = b2.vec2((u - v) * s, (u + v) * s);
-                if (@abs(p.x) > self.pen.x + 1 or @abs(p.y) > self.pen.y + 1) continue;
-                const col = if (@mod(i + j, 2) == 0) tile_a else tile_b;
-                engine.drawTile3(to3(p, 0), 1, std.math.pi / 4.0, col);
-            }
-        }
-    }
-
-    fn drawChick(ch: Chick) void {
-        const p = b2.pose(ch.body).pos;
-        const h = ch.heading;
+    /// Draws a chick `scale`d around its feet, raised by `lift` and turned an
+    /// extra `spin` (the hatch and death animations use these).
+    fn drawChick(look: Look, scale: f32, lift: f32, spin: f32) void {
+        if (scale <= 0) return;
+        const p = look.pos;
+        const h = look.heading + spin;
         const f = b2.vec2(@cos(h), @sin(h)); // forward
-        const s = b2.vec2(-f.y, f.x); // side
-        const at = struct {
-            fn at(o: b2.Vec2, fw: b2.Vec2, sd: b2.Vec2, along: f32, side: f32, height: f32) rl.Vector3 {
-                return to3(b2.vec2(o.x + fw.x * along + sd.x * side, o.y + fw.y * along + sd.y * side), height);
-            }
-        }.at;
+        const sd = b2.vec2(-f.y, f.x); // side
+        const Rig = struct {
+            p: b2.Vec2,
+            f: b2.Vec2,
+            sd: b2.Vec2,
+            k: f32,
+            lift: f32,
+            yaw: f32,
 
-        const bob = 0.05 * @abs(@sin(ch.walk_phase));
-        const eating = ch.eat_timer > 0;
+            fn part(r: @This(), along: f32, side: f32, height: f32, l: f32, hh: f32, w: f32, col: rl.Color) void {
+                const a = along * r.k;
+                const s = side * r.k;
+                box(
+                    to3(b2.vec2(r.p.x + r.f.x * a + r.sd.x * s, r.p.y + r.f.y * a + r.sd.y * s), height * r.k + r.lift),
+                    l * r.k,
+                    hh * r.k,
+                    w * r.k,
+                    r.yaw,
+                    col,
+                );
+            }
+        };
+        const rig: Rig = .{ .p = p, .f = f, .sd = sd, .k = scale, .lift = lift, .yaw = h };
+
+        const bob = 0.05 * @abs(@sin(look.walk_phase));
+        const eating = look.eat_timer > 0;
         // While eating the head dips to the ground a few times.
-        const peck = if (eating) @abs(@sin((eat_time - ch.eat_timer) * 16)) else 0;
+        const peck = if (eating) @abs(@sin((eat_time - look.eat_timer) * 16)) else 0;
         const head_fwd: f32 = if (eating) 0.3 else 0.2;
         const head_h: f32 = if (eating) 0.22 + 0.15 * peck else 0.56 + bob;
-        const body_col = rl.grey(ch.tint);
-        const head_col = rl.grey(ch.tint + head_lift);
+        const body_col = rl.grey(look.tint);
+        const head_col = rl.grey(look.tint + head_lift);
 
-        engine.drawDisc3(to3(p, 0.005), chick_r * 0.95, shadow);
+        engine.drawDisc3(to3(p, 0.005), chick_r * 0.95 * @min(scale, 1), shadow);
         // Legs.
-        box(at(p, f, s, 0, 0.09, 0.07), 0.05, 0.14, 0.05, h, beak);
-        box(at(p, f, s, 0, -0.09, 0.07), 0.05, 0.14, 0.05, h, beak);
+        rig.part(0, 0.09, 0.07, 0.05, 0.14, 0.05, beak);
+        rig.part(0, -0.09, 0.07, 0.05, 0.14, 0.05, beak);
         // Body and tail.
-        box(at(p, f, s, 0, 0, 0.3 + bob), 0.46, 0.34, 0.4, h, body_col);
-        box(at(p, f, s, -0.28, 0, 0.42 + bob), 0.12, 0.16, 0.2, h, body_col);
+        rig.part(0, 0, 0.3 + bob, 0.46, 0.34, 0.4, body_col);
+        rig.part(-0.28, 0, 0.42 + bob, 0.12, 0.16, 0.2, body_col);
         // Head, beak, comb, eyes.
-        box(at(p, f, s, head_fwd, 0, head_h), 0.28, 0.26, 0.26, h, head_col);
-        box(at(p, f, s, head_fwd + 0.18, 0, head_h - 0.03), 0.12, 0.07, 0.1, h, beak);
-        box(at(p, f, s, head_fwd - 0.02, 0, head_h + 0.16), 0.14, 0.07, 0.05, h, comb);
-        box(at(p, f, s, head_fwd + 0.08, 0.13, head_h + 0.04), 0.06, 0.06, 0.02, h, eye);
-        box(at(p, f, s, head_fwd + 0.08, -0.13, head_h + 0.04), 0.06, 0.06, 0.02, h, eye);
+        rig.part(head_fwd, 0, head_h, 0.28, 0.26, 0.26, head_col);
+        rig.part(head_fwd + 0.18, 0, head_h - 0.03, 0.12, 0.07, 0.1, beak);
+        rig.part(head_fwd - 0.02, 0, head_h + 0.16, 0.14, 0.07, 0.05, comb);
+        rig.part(head_fwd + 0.08, 0.13, head_h + 0.04, 0.06, 0.06, 0.02, eye);
+        rig.part(head_fwd + 0.08, -0.13, head_h + 0.04, 0.06, 0.06, 0.02, eye);
+    }
+
+    /// An egg: two stacked boxes, so it reads rounder than one.
+    fn drawEgg(pos: b2.Vec2, scale: f32, wobble: f32) void {
+        if (scale <= 0) return;
+        engine.drawDisc3(to3(pos, 0.005), 0.18 * @min(scale, 1), shadow);
+        box(to3(pos, 0.14 * scale), 0.3 * scale, 0.28 * scale, 0.3 * scale, wobble, egg_col);
+        box(to3(pos, 0.34 * scale), 0.2 * scale, 0.14 * scale, 0.2 * scale, wobble, egg_col);
+    }
+
+    fn drawParticle(pt: Particle) void {
+        // Shrink away over the last third of the life.
+        const k = @min(1, pt.life / (pt.max_life / 3));
+        const s = pt.size * k;
+        box(pt.pos, s, s, s, pt.yaw, pt.col);
     }
 
     fn drawSeed(s: Seed) void {
@@ -398,13 +597,23 @@ pub const Game = struct {
     }
 
     pub fn draw(self: *Game) void {
-        self.view.begin(rl.black);
-        self.drawGround();
+        self.view.begin(rl.blank);
         for (self.seeds) |s| if (s.alive) drawSeed(s);
-        for (self.chicks[0..self.n_chicks]) |ch| drawChick(ch);
+        for (self.chicks[0..self.n_chicks]) |ch| {
+            if (ch.hatched()) {
+                drawChick(ch.look(), anim.hatchScale(ch.hatch_t), 0, 0);
+            } else {
+                drawEgg(b2.pose(ch.body).pos, anim.eggScale(ch.hatch_t), anim.eggWobble(ch.hatch_t));
+            }
+        }
+        for (self.corpses[0..self.n_corpses]) |cp| {
+            const d = anim.death(cp.t);
+            drawChick(cp.look, d.scale, d.lift, d.spin);
+        }
+        for (self.particles[0..self.n_particles]) |pt| drawParticle(pt);
         self.view.end();
 
-        rl.c.ClearBackground(rl.black);
+        rl.c.ClearBackground(rl.blank);
         self.view.present();
     }
 };

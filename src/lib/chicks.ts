@@ -10,6 +10,45 @@
  * module, in `game/src/web/pre.js`.
  */
 
+import { createSignal } from "solid-js";
+import type { MainModule } from "../../game/zig-out/chicks.mjs";
+
+/** The running game, once loaded (never, under reduced motion or without WebGL). */
+const [chicks, setChicks] = createSignal<MainModule>();
+export { chicks };
+
+/** Whether the chicks are on. Remembered per browser in localStorage. */
+const storageKey = "chicks";
+const [chicksOn, setOn] = createSignal(readOn());
+export { chicksOn };
+
+function readOn() {
+	try {
+		return localStorage.getItem(storageKey) !== "off";
+	} catch {
+		return true; // storage blocked: default to on, just not remembered
+	}
+}
+
+/** Turns the chicks off (they die) or on (a fresh flock hatches). */
+export function setChicksOn(on: boolean) {
+	const game = chicks();
+	if (!game || on === chicksOn()) return;
+	if (on) game._chicks_respawn();
+	else game._chicks_kill();
+	setOn(on);
+	try {
+		localStorage.setItem(storageKey, on ? "on" : "off");
+	} catch {
+		// Not remembered; the toggle still works for this page.
+	}
+}
+
+/** Replaces the flock with a fresh one (only while on). */
+export function respawnChicks() {
+	if (chicksOn()) chicks()?._chicks_respawn();
+}
+
 let started = false;
 
 export function startChicks() {
@@ -43,10 +82,22 @@ async function load(canvas: HTMLCanvasElement) {
 	const { default: createChicks } =
 		await import("../../game/zig-out/chicks.mjs");
 	const game = await createChicks({ canvas, print: () => {} });
+	// Off from an earlier visit: remove the flock before its first frame. They
+	// are all still eggs, which vanish without a death animation.
+	if (!chicksOn()) game._chicks_kill();
+	setChicks(game);
 
 	window.addEventListener(
 		"pointerup",
-		(e) => game._chicks_click(e.clientX, e.clientY, e.button),
+		(e) => {
+			// Presses on the chick controls (chicks-controls.tsx) drop no seed.
+			if (
+				e.target instanceof Element &&
+				e.target.closest("[data-chicks-controls]")
+			)
+				return;
+			game._chicks_click(e.clientX, e.clientY, e.button);
+		},
 		{ capture: true, passive: true },
 	);
 }

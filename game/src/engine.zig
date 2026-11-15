@@ -224,24 +224,6 @@ pub fn drawBox3(center: Vector3, size: Vector3, yaw: f32, color: rl.Color) void 
     rl.c.rlEnd();
 }
 
-/// Flat square on the ground plane, `size` meters a side, turned by `yaw`.
-/// Call inside a 3D mode.
-pub fn drawTile3(center: Vector3, size: f32, yaw: f32, color: rl.Color) void {
-    const h = size / 2;
-    const u: Vector3 = .{ .x = @cos(yaw) * h, .y = 0, .z = @sin(yaw) * h };
-    const v: Vector3 = .{ .x = -u.z, .y = 0, .z = u.x };
-    const p00 = add3(add3(center, u, -1), v, -1);
-    const p10 = add3(add3(center, u, 1), v, -1);
-    const p11 = add3(add3(center, u, 1), v, 1);
-    const p01 = add3(add3(center, u, -1), v, 1);
-    _ = rl.c.rlCheckRenderBatchLimit(6);
-    rl.c.rlBegin(rl.c.RL_TRIANGLES);
-    rl.c.rlColor4ub(color.r, color.g, color.b, color.a);
-    // u × v points down (-Y), so p00→p11→p10 is counter-clockwise from above.
-    for ([_]Vector3{ p00, p11, p10, p00, p01, p11 }) |p| rl.c.rlVertex3f(p.x, p.y, p.z);
-    rl.c.rlEnd();
-}
-
 /// Flat filled disc on the ground plane (e.g. a blob shadow). Call inside a 3D mode.
 pub fn drawDisc3(center: Vector3, radius: f32, color: rl.Color) void {
     const segs = 12;

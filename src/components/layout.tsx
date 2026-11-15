@@ -1,5 +1,6 @@
 import { A } from "@solidjs/router";
 import { For, type JSX } from "solid-js";
+import { ChicksControls } from "@/components/chicks-controls";
 import { motion } from "@/components/motion";
 import { activeLink, TextLink } from "@/components/text-link";
 import { Separator } from "@/components/ui/separator";
@@ -54,6 +55,7 @@ export default function Layout(props: { children?: JSX.Element }) {
 					</For>
 				</ul>
 			</footer>
+			<ChicksControls />
 		</div>
 	);
 }

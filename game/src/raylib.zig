@@ -22,3 +22,4 @@ pub fn grey(v: u8) Color {
 // raylib's color macros use C compound literals, which translate-c skips.
 pub const black = grey(0);
 pub const white = grey(255);
+pub const blank = rgba(0, 0, 0, 0);
