@@ -12,6 +12,16 @@ html {
 
 body {
 	font-family: "Lato", ui-sans-serif, system-ui, sans-serif;
+	/*
+	 * Ground of the chicks background (src/lib/chicks.ts): a 2:1 diamond
+	 * checker in game pixels (one 24x12 tile, scaled 4x like the game's
+	 * pixels). In CSS so it is there on first paint, before the game loads;
+	 * the game canvas is transparent and only draws chicks and seeds.
+	 */
+	background: #080808
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' shape-rendering='crispEdges'%3E%3Cpath d='M12 0 24 6 12 12 0 6z' fill='%230e0e0e'/%3E%3C/svg%3E")
+		center / 96px 48px fixed;
+	image-rendering: pixelated;
 }
 
 @theme inline {
