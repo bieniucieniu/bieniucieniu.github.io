@@ -17,7 +17,7 @@ export default function MotionDemo() {
 			<div class="grid gap-6 border border-border p-4 sm:grid-cols-2">
 				<div class="flex flex-col gap-3">
 					<p class="text-xs text-muted-foreground">Drag and hover</p>
-					<div class="h-12 w-full max-w-56 bg-muted">
+					<div class="h-12 w-full max-w-56 outline outline-foreground">
 						<motion.div
 							class="size-12 cursor-grab bg-primary active:cursor-grabbing"
 							drag="x"
@@ -30,6 +30,7 @@ export default function MotionDemo() {
 					<p class="text-xs text-muted-foreground">Enter and exit</p>
 					<div class="flex gap-2">
 						<Button
+							class="hover:bg-primary"
 							onClick={() =>
 								setItems((list) => [
 									...list,
@@ -41,6 +42,7 @@ export default function MotionDemo() {
 						</Button>
 						<Button
 							variant="outline"
+							class="hover:bg-foreground hover:text-background"
 							onClick={() => setItems((list) => list.slice(0, -1))}
 						>
 							Remove
@@ -50,7 +52,7 @@ export default function MotionDemo() {
 						<AnimatePresence each={items} by={(item) => item.id}>
 							{(item) => (
 								<motion.div
-									class="bg-muted px-3 py-1.5 text-sm"
+									class="border border-border px-3 py-1.5 text-sm"
 									initial={{ opacity: 0, x: -12 }}
 									animate={{ opacity: 1, x: 0 }}
 									exit={{ opacity: 0, x: 12 }}

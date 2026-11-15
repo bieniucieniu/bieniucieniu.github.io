@@ -14,7 +14,7 @@ import type { Project, Status } from "@/lib/data";
 
 const statusVariant: Record<Status, BadgeVariant> = {
 	live: "default",
-	wip: "secondary",
+	wip: "outline",
 	done: "outline",
 };
 
@@ -23,7 +23,7 @@ const linkClass =
 
 export default function ProjectCard(props: Project) {
 	return (
-		<Card class="text-sm">
+		<Card class="text-sm ring-foreground">
 			<CardHeader>
 				<CardTitle class="text-base font-bold">{props.title}</CardTitle>
 				<Show when={props.status}>

@@ -58,11 +58,15 @@ body {
 }
 
 .tiptap-editor .ProseMirror code {
-	@apply bg-muted px-1 py-0.5 font-mono text-xs;
+	@apply border border-border px-1 font-mono text-xs;
 }
 
 .tiptap-editor .ProseMirror pre {
-	@apply my-3 overflow-x-auto bg-muted p-3 font-mono text-xs;
+	@apply my-3 overflow-x-auto border border-border p-3 font-mono text-xs;
+}
+
+.tiptap-editor .ProseMirror pre code {
+	@apply border-0 p-0;
 }
 
 /* xyflow: follow theme tokens */
@@ -71,14 +75,20 @@ body {
 	--xy-node-border: 1px solid var(--border);
 	--xy-node-background-color: var(--card);
 	--xy-node-boxshadow-selected: 0 0 0 1px var(--ring);
-	--xy-handle-background-color: var(--muted-foreground);
+	--xy-node-boxshadow-hover: none;
+	--xy-edge-stroke-selected: var(--foreground);
+	--xy-selection-background-color: transparent;
+	--xy-selection-border: 1px dotted var(--foreground);
+	--xy-controls-box-shadow: none;
+	--xy-handle-background-color: var(--foreground);
 	--xy-handle-border-color: var(--card);
-	--xy-edge-stroke: var(--muted-foreground);
+	--xy-edge-stroke: var(--foreground);
 	--xy-controls-button-background-color: var(--card);
-	--xy-controls-button-background-color-hover: var(--muted);
+	--xy-controls-button-background-color-hover: var(--foreground);
+	--xy-controls-button-color-hover: var(--background);
 	--xy-controls-button-color: var(--foreground);
 	--xy-controls-button-border-color: var(--border);
-	--xy-background-pattern-dots-color: var(--accent);
+	--xy-background-pattern-color: var(--foreground);
 }
 
 @theme inline {
@@ -132,31 +142,45 @@ body {
 }
 
 .dark {
-	--background: oklch(0.208 0.042 265.755);
-	--foreground: oklch(0.929 0.013 255.508);
-	--card: oklch(0.239 0.042 265.755);
-	--card-foreground: oklch(0.929 0.013 255.508);
-	--popover: oklch(0.239 0.042 265.755);
-	--popover-foreground: oklch(0.929 0.013 255.508);
-	--primary: oklch(0.777 0.152 181.912);
-	--primary-foreground: oklch(0.208 0.042 265.755);
-	--secondary: oklch(0.279 0.041 260.031);
-	--secondary-foreground: oklch(0.929 0.013 255.508);
-	--muted: oklch(0.279 0.041 260.031);
-	--muted-foreground: oklch(0.704 0.04 256.788);
-	--accent: oklch(0.372 0.044 257.287);
-	--accent-foreground: oklch(0.984 0.003 247.858);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(1 0 0 / 10%);
-	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.704 0.14 182.503);
+	--background: #000;
+	--foreground: #fff;
+	--card: #000;
+	--card-foreground: #fff;
+	--popover: #000;
+	--popover-foreground: #fff;
+	--primary: #fff;
+	--primary-foreground: #000;
+	--secondary: #000;
+	--secondary-foreground: #fff;
+	--muted: #000;
+	--muted-foreground: #fff;
+	--accent: #fff;
+	--accent-foreground: #000;
+	--destructive: #fff;
+	--border: #fff;
+	--input: #000;
+	--ring: #fff;
 }
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border outline-ring;
 	}
 	body {
 		@apply bg-background text-foreground antialiased;
 	}
+}
+
+/*
+ * Black and white only. These stay unlayered so they win over the
+ * registry components' translucent utilities (e.g. ring-ring/50), which
+ * would otherwise mix white into grey.
+ */
+*:focus-visible {
+	--tw-ring-color: var(--ring);
+}
+
+::selection {
+	background: var(--foreground);
+	color: var(--background);
 }

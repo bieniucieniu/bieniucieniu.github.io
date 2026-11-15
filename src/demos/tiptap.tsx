@@ -19,6 +19,10 @@ const marks = [
 	{ name: "code", label: "</>", class: "font-mono" },
 ] as const;
 
+/** Black-and-white states: invert on hover/pressed, dashed when disabled. */
+const control =
+	"border-border hover:bg-foreground hover:text-background data-pressed:bg-foreground data-pressed:text-background disabled:border-dashed disabled:opacity-100";
+
 /** Keeps the editor selection when a toolbar control is pressed. */
 const keepSelection = (event: MouseEvent) => event.preventDefault();
 
@@ -43,13 +47,14 @@ function MenuBar() {
 		<div
 			role="toolbar"
 			aria-label="Formatting"
-			class="flex flex-wrap gap-2 border-b border-border bg-muted/40 p-2"
+			class="flex flex-wrap gap-2 border-b border-border p-2"
 		>
 			<ButtonGroup aria-label="Text style">
 				<For each={marks}>
 					{(mark) => (
 						<Toggle
 							variant="outline"
+							class={control}
 							aria-label={mark.name}
 							pressed={state()?.[mark.name] ?? false}
 							onChange={() => chain().toggleMark(mark.name).run()}
@@ -63,6 +68,7 @@ function MenuBar() {
 			<ButtonGroup aria-label="Blocks">
 				<Toggle
 					variant="outline"
+					class={control}
 					aria-label="Heading"
 					pressed={state()?.h2 ?? false}
 					onChange={() => chain().toggleHeading({ level: 2 }).run()}
@@ -72,6 +78,7 @@ function MenuBar() {
 				</Toggle>
 				<Toggle
 					variant="outline"
+					class={control}
 					aria-label="Bullet list"
 					pressed={state()?.list ?? false}
 					onChange={() => chain().toggleBulletList().run()}
@@ -83,6 +90,7 @@ function MenuBar() {
 			<ButtonGroup aria-label="History">
 				<Button
 					variant="outline"
+					class={control}
 					disabled={!state()?.canUndo}
 					onMouseDown={keepSelection}
 					onClick={() => chain().undo().run()}
@@ -91,6 +99,7 @@ function MenuBar() {
 				</Button>
 				<Button
 					variant="outline"
+					class={control}
 					disabled={!state()?.canRedo}
 					onMouseDown={keepSelection}
 					onClick={() => chain().redo().run()}
