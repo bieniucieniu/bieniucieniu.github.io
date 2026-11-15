@@ -37,3 +37,8 @@ Thumbs.db
 .devenv*
 devenv.local.nix
 .direnv
+
+# background game (game/): zig caches and build output (zig-out is imported by src/lib/chicks.ts)
+game/.zig-cache/
+game/zig-out/
+game/zig-pkg/

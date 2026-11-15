@@ -1,0 +1,22 @@
+.{
+    .name = .chicks,
+    .version = "0.0.0",
+    .fingerprint = 0xd55abfc12103ef04,
+    .minimum_zig_version = "0.17.0",
+    .dependencies = .{
+        .raylib = .{
+            .url = "https://github.com/raysan5/raylib/archive/refs/tags/6.2.tar.gz",
+            .hash = "raylib-6.0.0-whq8uDpYOAVcH_KyOZ0--nYF1dEsjdQ5r4e9R24UkQOi",
+        },
+        .box2d = .{
+            .url = "https://github.com/erincatto/box2d/archive/refs/tags/v3.2.0.tar.gz",
+            .hash = "box2d-3.2.0-C17qGOHCFwB_HQTlWO3xsKYk6nWkKlqtVMMPng4XYv8w",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "build",
+        "src",
+    },
+}

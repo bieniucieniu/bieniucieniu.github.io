@@ -16,25 +16,53 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Builds inside the devenv shell, which provides Node.js, pnpm, Zig and
+  # emscripten (the background game in game/ is built to wasm).
+  # https://devenv.sh/integrations/github-actions/
   build:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: devenv shell -- bash -e {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/checkout@v5
+
+      - uses: cachix/install-nix-action@v31
+
+      - uses: cachix/cachix-action@v16
         with:
-          node-version: 24
-      - name: Setup pnpm
-        # Uses the version pinned in package.json "packageManager".
-        run: corepack enable
+          name: devenv
+
+      - name: Install devenv.sh
+        shell: bash
+        run: nix profile add nixpkgs#devenv
+
+      # Fetched packages (raylib, Box2D), Zig's build cache and emscripten's
+      # compiled system libraries.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            game/zig-pkg
+            ~/.cache/zig
+            .devenv/state/em-cache
+          key: game-${{ runner.os }}-${{ hashFiles('game/build.zig.zon', 'devenv.lock') }}-${{ github.sha }}
+          restore-keys: |
+            game-${{ runner.os }}-${{ hashFiles('game/build.zig.zon', 'devenv.lock') }}-
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build with Vite
+
+      - name: Test game
+        run: cd game && zig build test
+
+      - name: Build
         run: pnpm run build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

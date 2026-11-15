@@ -5,9 +5,9 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"start": "vp dev",
 		"dev": "vp dev",
 		"build": "vp build",
+		"build:game": "cd game && zig build",
 		"serve": "vp preview",
 		"check": "vp check",
 		"lint": "vp lint",

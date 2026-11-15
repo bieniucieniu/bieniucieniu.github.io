@@ -3,6 +3,7 @@ import path from "path";
 import devtools from "solid-devtools/vite";
 import { defineConfig } from "vite-plus";
 import solidPlugin from "vite-plugin-solid";
+import { zigBuild } from "./plugins/zig-build";
 
 export default defineConfig({
 	staged: {
@@ -20,10 +21,10 @@ export default defineConfig({
 		arrowParens: "always",
 		bracketSameLine: false,
 		bracketSpacing: true,
-		ignorePatterns: ["dist/**"],
+		ignorePatterns: ["dist/**", "game/**"],
 	},
 	lint: {
-		ignorePatterns: ["dist/**"],
+		ignorePatterns: ["dist/**", "game/**"],
 		options: {
 			typeAware: true,
 			typeCheck: true,
@@ -33,11 +34,15 @@ export default defineConfig({
 			"no-cond-assign": "off",
 		},
 	},
-	plugins: [devtools(), solidPlugin(), tailwindcss()],
+	plugins: [
+		devtools(),
+		solidPlugin(),
+		tailwindcss(),
+		zigBuild({ cwd: "game" }),
+	],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
-			"~": path.resolve(__dirname, "./src"),
 		},
 	},
 	server: {
