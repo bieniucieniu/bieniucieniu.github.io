@@ -7,23 +7,29 @@ Built with SolidJS, Vite+, Tailwind CSS and `@solidjs/router`. UI components, Ti
 Add or update a component:
 
 ```bash
-bunx shadcn@latest add bieniucieniu/solid-kit/<item>
+pnpm dlx shadcn@latest add bieniucieniu/solid-kit/<item>
 ```
 
 ## Development
 
-Requires [Bun](https://bun.sh).
+Tooling comes from [devenv](https://devenv.sh): Node.js 24 and pnpm 12. Entering the shell runs `pnpm install`.
 
 ```bash
-bun install
-bun run dev
+devenv shell
+# or: direnv allow
+devenv up          # dev server on http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Without devenv, use Node.js 24 and pnpm 12:
+
+```bash
+pnpm install
+pnpm dev
+```
 
 ## Build
 
 ```bash
-bun run build
-bun run serve
+pnpm build
+pnpm serve
 ```

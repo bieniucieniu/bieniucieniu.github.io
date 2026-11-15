@@ -29,3 +29,11 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# pnpm
+.pnpm-store
+
+# devenv
+.devenv*
+devenv.local.nix
+.direnv
