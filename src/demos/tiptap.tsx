@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Toggle } from "@/components/ui/toggle";
+import "./tiptap.css";
 
 const marks = [
 	{ name: "bold", label: "B", class: "font-bold" },

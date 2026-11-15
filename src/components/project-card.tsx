@@ -10,6 +10,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { TextLink } from "@/components/text-link";
 import type { Project, Status } from "@/lib/data";
 
 const statusVariant: Record<Status, BadgeVariant> = {
@@ -18,8 +19,7 @@ const statusVariant: Record<Status, BadgeVariant> = {
 	done: "outline",
 };
 
-const linkClass =
-	"inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground";
+const linkClass = "inline-flex items-center gap-1";
 
 export default function ProjectCard(props: Project) {
 	return (
@@ -45,24 +45,18 @@ export default function ProjectCard(props: Project) {
 			<Show when={props.link || props.repo}>
 				<CardFooter class="gap-4 text-xs">
 					<Show when={props.link}>
-						<a
-							href={props.link}
-							target="_blank"
-							rel="noreferrer"
-							class={linkClass}
-						>
-							site <ExternalLink class="size-3" />
-						</a>
+						{(href) => (
+							<TextLink variant="quiet" href={href()} class={linkClass}>
+								site <ExternalLink class="size-3" />
+							</TextLink>
+						)}
 					</Show>
 					<Show when={props.repo}>
-						<a
-							href={props.repo}
-							target="_blank"
-							rel="noreferrer"
-							class={linkClass}
-						>
-							source <ExternalLink class="size-3" />
-						</a>
+						{(href) => (
+							<TextLink variant="quiet" href={href()} class={linkClass}>
+								source <ExternalLink class="size-3" />
+							</TextLink>
+						)}
 					</Show>
 				</CardFooter>
 			</Show>

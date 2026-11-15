@@ -1,5 +1,6 @@
 import { type Component, For, onMount } from "solid-js";
 import { Page, Section } from "@/components/layout";
+import { TextLink } from "@/components/text-link";
 import MotionDemo from "@/demos/motion";
 import TiptapDemo from "@/demos/tiptap";
 import XyflowDemo from "@/demos/xyflow";
@@ -51,17 +52,9 @@ export default function LibsPage() {
 		<Page>
 			<Section title="Libs">
 				<p class="text-sm leading-relaxed text-muted-foreground">
-					Live demos from{" "}
-					<a
-						href={repo}
-						target="_blank"
-						rel="noreferrer"
-						class="text-primary underline underline-offset-4"
-					>
-						solid-kit
-					</a>
-					, my SolidJS ports of React libraries. Work in progress. The UI on
-					this site comes from its shadcn registry.
+					Live demos from <TextLink href={repo}>solid-kit</TextLink>, my SolidJS
+					ports of React libraries. Work in progress. The UI on this site comes
+					from its shadcn registry.
 				</p>
 			</Section>
 			<For each={libs}>
@@ -69,14 +62,12 @@ export default function LibsPage() {
 					<section id={lib.slug} class="flex scroll-mt-8 flex-col gap-3">
 						<div>
 							<h3 class="font-bold">
-								<a
+								<TextLink
+									variant="quiet"
 									href={`${repo}/tree/main/packages/${lib.slug}`}
-									target="_blank"
-									rel="noreferrer"
-									class="hover:underline"
 								>
 									{lib.title}
-								</a>
+								</TextLink>
 							</h3>
 							<p class="text-sm text-muted-foreground">{lib.description}</p>
 						</div>

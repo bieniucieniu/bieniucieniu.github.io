@@ -1,0 +1,59 @@
+@reference "../index.css";
+
+/* Editor frame and ProseMirror content of the tiptap demo. */
+.tiptap-editor {
+	@apply overflow-hidden border border-border bg-card;
+}
+
+.tiptap-editor:focus-within {
+	@apply border-ring;
+}
+
+.tiptap-editor .ProseMirror {
+	@apply min-h-40 px-4 py-3 text-sm outline-none;
+}
+
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+	@apply pointer-events-none float-left h-0 text-muted-foreground;
+	content: attr(data-placeholder);
+}
+
+.tiptap-editor .ProseMirror h1 {
+	@apply mb-3 text-2xl font-bold;
+}
+
+.tiptap-editor .ProseMirror h2 {
+	@apply mt-3 mb-2 text-xl font-bold;
+}
+
+.tiptap-editor .ProseMirror h3 {
+	@apply mt-3 mb-2 text-lg font-bold;
+}
+
+.tiptap-editor .ProseMirror p {
+	@apply mb-2 leading-relaxed;
+}
+
+.tiptap-editor .ProseMirror ul {
+	@apply mb-2 ml-5 list-disc;
+}
+
+.tiptap-editor .ProseMirror ol {
+	@apply mb-2 ml-5 list-decimal;
+}
+
+.tiptap-editor .ProseMirror blockquote {
+	@apply my-3 border-l-2 border-primary pl-3 text-muted-foreground;
+}
+
+.tiptap-editor .ProseMirror code {
+	@apply border border-border px-1 font-mono text-xs;
+}
+
+.tiptap-editor .ProseMirror pre {
+	@apply my-3 overflow-x-auto border border-border p-3 font-mono text-xs;
+}
+
+.tiptap-editor .ProseMirror pre code {
+	@apply border-0 p-0;
+}

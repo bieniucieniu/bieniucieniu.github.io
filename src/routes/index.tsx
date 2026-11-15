@@ -1,7 +1,7 @@
-import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { Page, Section } from "@/components/layout";
 import ProjectCard, { TagList } from "@/components/project-card";
+import { TextLink } from "@/components/text-link";
 import { projects, skills } from "@/lib/data";
 
 export default function Home() {
@@ -16,9 +16,7 @@ export default function Home() {
 					</p>
 					<p>
 						In my spare time I write SolidJS libraries (
-						<A href="/libs" class="text-primary underline underline-offset-4">
-							solid-kit
-						</A>
+						<TextLink href="/libs">solid-kit</TextLink>
 						), small Kotlin and Zig projects, and run a home k3s cluster.
 					</p>
 				</div>
@@ -45,12 +43,9 @@ export default function Home() {
 						{(project) => <ProjectCard {...project} />}
 					</For>
 				</div>
-				<A
-					href="/projects"
-					class="text-sm text-muted-foreground transition-colors hover:text-foreground"
-				>
+				<TextLink variant="quiet" href="/projects" class="text-sm">
 					All projects →
-				</A>
+				</TextLink>
 			</Section>
 		</Page>
 	);

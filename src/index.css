@@ -1,6 +1,9 @@
 @import "tailwindcss";
+/* The Zig game sources and build output hold no class names. */
+@source not "../game";
 @import "tw-animate-css";
 
+/* Registry components use `dark:` variants; <html class="dark"> keeps them on. */
 @custom-variant dark (&:is(.dark *));
 
 html {
@@ -9,86 +12,6 @@ html {
 
 body {
 	font-family: "Lato", ui-sans-serif, system-ui, sans-serif;
-}
-
-/* Tiptap demo */
-.tiptap-editor {
-	@apply overflow-hidden border border-border bg-card;
-}
-
-.tiptap-editor:focus-within {
-	@apply border-ring;
-}
-
-.tiptap-editor .ProseMirror {
-	@apply min-h-40 px-4 py-3 text-sm outline-none;
-}
-
-.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
-	@apply pointer-events-none float-left h-0 text-muted-foreground;
-	content: attr(data-placeholder);
-}
-
-.tiptap-editor .ProseMirror h1 {
-	@apply mb-3 text-2xl font-bold;
-}
-
-.tiptap-editor .ProseMirror h2 {
-	@apply mt-3 mb-2 text-xl font-bold;
-}
-
-.tiptap-editor .ProseMirror h3 {
-	@apply mt-3 mb-2 text-lg font-semibold;
-}
-
-.tiptap-editor .ProseMirror p {
-	@apply mb-2 leading-relaxed;
-}
-
-.tiptap-editor .ProseMirror ul {
-	@apply mb-2 ml-5 list-disc;
-}
-
-.tiptap-editor .ProseMirror ol {
-	@apply mb-2 ml-5 list-decimal;
-}
-
-.tiptap-editor .ProseMirror blockquote {
-	@apply my-3 border-l-2 border-primary pl-3 text-muted-foreground;
-}
-
-.tiptap-editor .ProseMirror code {
-	@apply border border-border px-1 font-mono text-xs;
-}
-
-.tiptap-editor .ProseMirror pre {
-	@apply my-3 overflow-x-auto border border-border p-3 font-mono text-xs;
-}
-
-.tiptap-editor .ProseMirror pre code {
-	@apply border-0 p-0;
-}
-
-/* xyflow: follow theme tokens */
-.xy-flow {
-	--xy-node-color: var(--card-foreground);
-	--xy-node-border: 1px solid var(--border);
-	--xy-node-background-color: var(--card);
-	--xy-node-boxshadow-selected: 0 0 0 1px var(--ring);
-	--xy-node-boxshadow-hover: none;
-	--xy-edge-stroke-selected: var(--foreground);
-	--xy-selection-background-color: transparent;
-	--xy-selection-border: 1px dotted var(--foreground);
-	--xy-controls-box-shadow: none;
-	--xy-handle-background-color: var(--foreground);
-	--xy-handle-border-color: var(--card);
-	--xy-edge-stroke: var(--foreground);
-	--xy-controls-button-background-color: var(--card);
-	--xy-controls-button-background-color-hover: var(--foreground);
-	--xy-controls-button-color-hover: var(--background);
-	--xy-controls-button-color: var(--foreground);
-	--xy-controls-button-border-color: var(--border);
-	--xy-background-pattern-color: var(--foreground);
 }
 
 @theme inline {
@@ -119,29 +42,9 @@ body {
 	--radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Black and white only: the site has a single dark theme. */
 :root {
 	--radius: 0;
-	--background: oklch(1 0 0);
-	--foreground: oklch(0.145 0 0);
-	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.145 0 0);
-	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.145 0 0);
-	--primary: oklch(0.205 0 0);
-	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.97 0 0);
-	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.97 0 0);
-	--muted-foreground: oklch(0.556 0 0);
-	--accent: oklch(0.97 0 0);
-	--accent-foreground: oklch(0.205 0 0);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.922 0 0);
-	--input: oklch(0.922 0 0);
-	--ring: oklch(0.708 0 0);
-}
-
-.dark {
 	--background: #000;
 	--foreground: #fff;
 	--card: #000;

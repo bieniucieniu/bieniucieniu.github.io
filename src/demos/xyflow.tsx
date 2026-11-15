@@ -1,6 +1,7 @@
 import { createFlow, Flow, Position } from "@/components/xyflow";
 import { Background, Controls } from "@/components/xyflow/panels";
 import "@/components/xyflow/style.css";
+import "./xyflow.css";
 
 const right = { sourcePosition: Position.Right, targetPosition: Position.Left };
 

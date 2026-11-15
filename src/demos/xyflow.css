@@ -1,0 +1,21 @@
+/* xyflow colours from the theme tokens (loaded after the library CSS). */
+.xy-flow {
+	--xy-node-color: var(--card-foreground);
+	--xy-node-border: 1px solid var(--border);
+	--xy-node-background-color: var(--card);
+	--xy-node-boxshadow-selected: 0 0 0 1px var(--ring);
+	--xy-node-boxshadow-hover: none;
+	--xy-edge-stroke-selected: var(--foreground);
+	--xy-selection-background-color: transparent;
+	--xy-selection-border: 1px dotted var(--foreground);
+	--xy-controls-box-shadow: none;
+	--xy-handle-background-color: var(--foreground);
+	--xy-handle-border-color: var(--card);
+	--xy-edge-stroke: var(--foreground);
+	--xy-controls-button-background-color: var(--card);
+	--xy-controls-button-background-color-hover: var(--foreground);
+	--xy-controls-button-color-hover: var(--background);
+	--xy-controls-button-color: var(--foreground);
+	--xy-controls-button-border-color: var(--border);
+	--xy-background-pattern-color: var(--foreground);
+}

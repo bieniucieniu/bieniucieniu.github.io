@@ -1,6 +1,7 @@
 import { A } from "@solidjs/router";
 import { For, type JSX } from "solid-js";
 import { motion } from "@/components/motion";
+import { activeLink, TextLink } from "@/components/text-link";
 import { Separator } from "@/components/ui/separator";
 import { contacts } from "@/lib/data";
 
@@ -24,14 +25,14 @@ export default function Layout(props: { children?: JSX.Element }) {
 				<nav aria-label="Main" class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
 					<For each={nav}>
 						{(item) => (
-							<A
+							<TextLink
+								variant="quiet"
 								href={item.href}
 								end
-								class="text-muted-foreground transition-colors hover:text-foreground"
-								activeClass="text-primary! underline underline-offset-4"
+								activeClass={activeLink}
 							>
 								{item.label}
-							</A>
+							</TextLink>
 						)}
 					</For>
 				</nav>
@@ -45,14 +46,9 @@ export default function Layout(props: { children?: JSX.Element }) {
 					<For each={contacts}>
 						{(c) => (
 							<li>
-								<a
-									href={c.href}
-									target={c.href.startsWith("http") ? "_blank" : undefined}
-									rel="noreferrer"
-									class="text-muted-foreground transition-colors hover:text-foreground"
-								>
+								<TextLink variant="quiet" href={c.href}>
 									{c.label}
-								</a>
+								</TextLink>
 							</li>
 						)}
 					</For>
