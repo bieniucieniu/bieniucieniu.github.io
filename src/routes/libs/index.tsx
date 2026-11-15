@@ -42,7 +42,9 @@ export default function LibsPage() {
 	onMount(() => {
 		const id = decodeURIComponent(location.hash.slice(1));
 		if (!libs.some((lib) => lib.slug === id)) return;
-		requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView());
+		setTimeout(() =>
+			document.getElementById(id)?.scrollIntoView({ behavior: "instant" }),
+		);
 	});
 
 	return (
